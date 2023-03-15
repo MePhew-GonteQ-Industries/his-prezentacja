@@ -33,7 +33,7 @@ io.on("connection", (socket: Socket) => {
   socket.on("joinRoom", (room: string) => {
     socket.join(room);
     console.log(`User with ${socket.id} joined room ${room}`);
-    io.to("players").emit("message", "Welcome to players room");
+    io.to("players").emit("message", "Witaj w pokoju graczy");
   });
 
   socket.on("disconnect", () => {
@@ -54,11 +54,11 @@ io.on("connection", (socket: Socket) => {
   socket.on("saveName", (name: string) => {
     console.log(`Client's socket id: ${socket.id}, name: ${name}`);
     if (nameExist(name)) {
-      console.log("name taken");
       console.log(names);
+      io.to(names[name]).emit("nameNotRegistered", "Imię jest już zajęte!");
     } else {
       names[name] = socket.id;
-      io.to(names[name]).emit("nameRegistered", true);
+      io.to(names[name]).emit("nameRegistered", "Zapraszamy do gry!");
       console.log(names);
     }
   });
