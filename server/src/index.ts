@@ -17,16 +17,50 @@ const io = new Server(server, {
   },
 });
 
+interface namesInterface {
+  [name: string]: string;
+}
+
+let names: namesInterface = {};
+
+const nameExist = (name: string) => {
+  return names[name] !== undefined;
+};
+
 io.on("connection", (socket: Socket) => {
   console.log(`User with id: ${socket.id} connected`);
 
+  socket.on("joinRoom", (room: string) => {
+    socket.join(room);
+    console.log(`User with ${socket.id} joined room ${room}`);
+    io.to("players").emit("message", "Witaj w pokoju graczy");
+  });
+
   socket.on("disconnect", () => {
+    for (const [key] of Object.entries(names)) {
+      if (names[key] === socket.id) {
+        delete names[key];
+      }
+    }
+    console.log(names);
     console.log(`User with id: ${socket.id} disconnected`);
   });
 
   socket.on("message", (message: string) => {
     console.log(message);
     socket.broadcast.emit("message", message);
+  });
+
+  socket.on("saveName", (name: string) => {
+    console.log(`Client's socket id: ${socket.id}, name: ${name}`);
+    if (nameExist(name)) {
+      console.log(names);
+      io.to(names[name]).emit("nameNotRegistered", "Imię jest już zajęte!");
+    } else {
+      names[name] = socket.id;
+      io.to(names[name]).emit("nameRegistered", "Zapraszamy do gry!");
+      console.log(names);
+    }
   });
 });
 
