@@ -7,7 +7,7 @@ const name = ref();
 
 const socket = io('http://localhost:4000');
 
-socket.emit('join_room', 'players');
+socket.emit('joinRoom', 'players');
 
 socket.on("message", (message) => {
     console.log(message);

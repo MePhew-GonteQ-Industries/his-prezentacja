@@ -30,7 +30,7 @@ const nameExist = (name: string) => {
 io.on("connection", (socket: Socket) => {
   console.log(`User with id: ${socket.id} connected`);
 
-  socket.on("join_room", (room: string) => {
+  socket.on("joinRoom", (room: string) => {
     socket.join(room);
     console.log(`User with ${socket.id} joined room ${room}`);
     io.to("players").emit("message", "Welcome to players room");
@@ -58,6 +58,7 @@ io.on("connection", (socket: Socket) => {
       console.log(names);
     } else {
       names[name] = socket.id;
+      io.to(names[name]).emit("nameRegistered", true);
       console.log(names);
     }
   });
