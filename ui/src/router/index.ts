@@ -14,8 +14,8 @@ const router = createRouter({
           component: () => import('@/components/panel/pages/TheHomePage.vue'),
         },
         {
-          path: 'game',
-          name: 'game',
+          path: 'game-spectator',
+          name: 'gameSpectator',
           component: () => import('@/views/GameViewSpectator.vue'),
         },
       ],

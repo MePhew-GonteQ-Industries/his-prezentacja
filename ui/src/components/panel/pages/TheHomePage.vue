@@ -1,5 +1,49 @@
 <script setup lang="ts">
-import { NButton, NEllipsis, NScrollbar } from "naive-ui";
+import { NButton, NEllipsis, NScrollbar, NCode } from "naive-ui";
+import hljs from 'highlight.js/lib/core';
+import python from 'highlight.js/lib/languages/python';
+
+hljs.registerLanguage('python', python);
+
+const exampleCode = `
+def get_user(
+    request: Request,
+    token: str = Depends(oauth2_scheme),
+    db: Session = Depends(get_db),
+    user_agent: str | None = Header(None),
+) -> UserSession:
+    payload = decode_jwt(token, expected_token_type=TokenType.access_token)
+    user = db.query(models.User).where(models.User.id == payload.user_id).first()
+
+    if not user:
+        raise UserNotFoundException()
+
+    sessions_db = (
+        db.query(models.Session).where(models.Session.user_id == user.id).all()
+    )
+
+    session_db = None
+
+    for session in sessions_db:
+        if compare_digest(session.access_token, token):
+            session_db = session
+            break
+
+    if not session_db:
+        raise SessionNotFoundHTTPException()
+
+    session_db.last_accessed = datetime.utcnow()
+    session_db.last_user_agent = user_agent
+    session_db.last_ip_address = request.client.host
+    db.commit()
+
+    if user.disabled:
+        raise AccountDisabledHTTPException()
+
+    user_session = UserSession(user=user, session=session_db)
+
+    return user_session
+`;
 </script>
 
 <template>
@@ -220,11 +264,42 @@ import { NButton, NEllipsis, NScrollbar } from "naive-ui";
     </div>
 
     <div class="trajectory">
-
+      <template v-if="true">
+        <img class="globe" src="@/assets/globe.svg" alt="Globe">
+        <div class="target-coordinates">
+          <div class="coordinate">
+            <p class="title">target latitude</p>
+            <p class="value">26°15.00°N</p>
+          </div>
+          <div class="coordinate">
+            <p class="title">target longitude</p>
+            <p class="value">26°15.00°N</p>
+          </div>
+        </div>
+        <div class="camera-mode">
+          <p class="title">camera</p>
+          <p class="mode">Auto - Earth IO</p>
+          <NButton ghost color="white" round size="large" class="camera-settings-btn">settings
+          </NButton>
+        </div>
+      </template>
+      <template v-else>
+        <NCode :code="exampleCode" language="python" show-line-numbers v-if="false" />
+      </template>
     </div>
   </div>
 </template>
 
+<style lang="scss">
+.n-button.camera-settings-btn {
+  background-color: #111B52;
+
+  span {
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+}
+</style>
 
 <style lang="scss">
 .divider.n-divider--dashed .n-divider__line {
@@ -284,6 +359,10 @@ import { NButton, NEllipsis, NScrollbar } from "naive-ui";
     width: 100%;
     display: grid;
     grid-template-rows: 13vh 70vh;
+
+    @media (min-height: 900px) {
+      grid-template-rows: 13vh 71vh;
+    }
 
     .step-buttons {
       display: flex;
@@ -432,7 +511,47 @@ import { NButton, NEllipsis, NScrollbar } from "naive-ui";
   }
 
   .trajectory {
-    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+
+    .globe {
+      width: 55%;
+    }
+
+    .target-coordinates {
+      display: flex;
+      gap: 1rem;
+
+      .coordinate {
+        p {
+          text-transform: uppercase;
+          font-weight: bold;
+        }
+      }
+    }
+
+    .camera-mode {
+      position: absolute;
+      bottom: 5%;
+      right: 5%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+
+      p {
+        font-weight: bold;
+        text-align: center;
+      }
+
+      .title {
+        text-transform: uppercase;
+      }
+    }
   }
 }
 </style>

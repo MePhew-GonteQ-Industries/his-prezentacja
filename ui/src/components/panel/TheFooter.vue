@@ -17,7 +17,7 @@ import { RouterLink } from 'vue-router';
           <circle cx="22.4268" cy="16.2646" r="6" fill="white" />
         </svg>
       </router-link>
-      <router-link :to="{ name: 'game' }">
+      <router-link :to="{ name: 'gameSpectator' }">
         <svg width="40" height="40" viewBox="0 0 81 81" fill="none"
           xmlns="http://www.w3.org/2000/svg">
           <path
@@ -35,7 +35,7 @@ import { RouterLink } from 'vue-router';
         </svg>
 
       </router-link>
-      <router-link :to="{ name: 'game' }">
+      <router-link :to="{ name: 'gameSpectator' }">
         <svg width="40" height="40" viewBox="0 0 81 81" fill="none"
           xmlns="http://www.w3.org/2000/svg">
           <path
@@ -187,9 +187,10 @@ footer {
       align-items: center;
       justify-content: center;
       flex-direction: column;
+      border-bottom: 4px solid transparent;
 
-      &.router-link-active {
-        border-bottom: 4px solid white;
+      &.router-link-exact-active {
+        border-color: white;
       }
     }
   }

@@ -8,12 +8,13 @@ import {
   NLoadingBarProvider,
 } from "naive-ui";
 import type { MessageProviderProps } from "naive-ui";
+import hljs from 'highlight.js/lib/core';
 
 const messagePlacement = ref<MessageProviderProps["placement"]>("top");
 </script>
 
 <template>
-  <n-config-provider :theme="darkTheme">
+  <n-config-provider :theme="darkTheme" :hljs="hljs">
     <n-loading-bar-provider>
       <n-message-provider :placement="messagePlacement">
         <RouterView />
