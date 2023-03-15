@@ -1,23 +1,34 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import DemoUiView from '@/views/DemoUiView.vue';
+import PanelView from '@/views/PanelView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: DemoUiView,
+      component: PanelView,
+      children: [
+        {
+          path: '',
+          name: 'home',
+          component: () => import('@/components/panel/pages/TheHomePage.vue'),
+        },
+        {
+          path: 'game',
+          name: 'game',
+          component: () => import('@/views/GameViewSpectator.vue'),
+        },
+      ],
     },
     {
       path: '/name',
       name: 'name',
-      component: () => import('@/views/NameUiView.vue'),
+      component: () => import('@/views/JoinGameView.vue'),
     },
     {
       path: '/game',
       name: 'game',
-      component: () => import('@/views/GameUiView.vue'),
+      component: () => import('@/views/GameViewClient.vue'),
     },
   ],
 });
