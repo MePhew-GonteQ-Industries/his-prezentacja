@@ -1,16 +1,30 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { NInput, NButton } from 'naive-ui';
+import { useRouter } from 'vue-router';
+import { NInput, NButton, useMessage } from 'naive-ui';
 import { io } from 'socket.io-client';
 
+const messageBox = useMessage();
+
 const name = ref();
+
+const router = useRouter();
 
 const socket = io('http://localhost:4000');
 
 socket.emit('joinRoom', 'players');
 
-socket.on("message", (message) => {
-    console.log(message);
+socket.on("message", (message: string) => {
+    messageBox.info(message);
+});
+
+socket.on("nameRegistered", (message: string) => {
+    messageBox.success(message);
+    router.push('game');
+});
+
+socket.on("nameNotRegistered", (message: string) => {
+    messageBox.error(message);
 });
 
 const saveName = () => {

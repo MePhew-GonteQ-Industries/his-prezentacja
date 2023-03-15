@@ -9,7 +9,7 @@ import {
 } from "naive-ui";
 import type { MessageProviderProps } from "naive-ui";
 
-const messagePlacement = ref<MessageProviderProps["placement"]>("bottom");
+const messagePlacement = ref<MessageProviderProps["placement"]>("top");
 </script>
 
 <template>
