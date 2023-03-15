@@ -30,12 +30,19 @@ const nameExist = (name: string) => {
 io.on("connection", (socket: Socket) => {
   console.log(`User with id: ${socket.id} connected`);
 
+  socket.on("join_room", (room: string) => {
+    socket.join(room);
+    console.log(`User with ${socket.id} joined room ${room}`);
+    io.to("players").emit("message", "Welcome to players room");
+  });
+
   socket.on("disconnect", () => {
-    for (const [key, value] of Object.entries(names)) {
+    for (const [key] of Object.entries(names)) {
       if (names[key] === socket.id) {
         delete names[key];
       }
     }
+    console.log(names);
     console.log(`User with id: ${socket.id} disconnected`);
   });
 
@@ -48,8 +55,10 @@ io.on("connection", (socket: Socket) => {
     console.log(`Client's socket id: ${socket.id}, name: ${name}`);
     if (nameExist(name)) {
       console.log("name taken");
+      console.log(names);
     } else {
       names[name] = socket.id;
+      console.log(names);
     }
   });
 });
