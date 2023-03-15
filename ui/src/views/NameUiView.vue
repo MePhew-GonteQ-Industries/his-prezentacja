@@ -7,6 +7,12 @@ const name = ref();
 
 const socket = io('http://localhost:4000');
 
+socket.emit('join_room', 'players');
+
+socket.on("message", (message) => {
+    console.log(message);
+});
+
 const saveName = () => {
 
     socket.emit('saveName', name.value);
