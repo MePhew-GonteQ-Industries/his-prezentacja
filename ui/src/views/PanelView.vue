@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import TheHeader from '@/components/panel/TheHeader.vue';
 import TheFooter from '@/components/panel/TheFooter.vue';
 </script>
 
 <template>
   <div class="panel">
-    <TheHeader />
     <main>
       <RouterView />
     </main>
@@ -18,11 +16,13 @@ import TheFooter from '@/components/panel/TheFooter.vue';
   border: 1px solid #adb0c2;
   height: 100vh;
   display: grid;
-  grid-template-rows: 10vh 82vh 8vh;
+  // grid-template-rows: 10vh 82vh 8vh;
+  grid-template-rows: 92vh 8vh;
   overflow: hidden;
 
   @media (min-height: 900px) {
-    grid-template-rows: 10vh 84vh 6vh;
+    // grid-template-rows: 10vh 84vh 6vh;
+    grid-template-rows: 94vh 6vh;
   }
 
   * {

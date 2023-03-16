@@ -3,6 +3,10 @@ import { NButton, NEllipsis, NScrollbar, NCode } from "naive-ui";
 import { ref } from "vue";
 import hljs from 'highlight.js/lib/core';
 import python from 'highlight.js/lib/languages/python';
+import TheHeader from '@/components/panel/TheHeader.vue';
+import { useMainStore } from '@/stores/main';
+import { storeToRefs } from "pinia";
+
 
 hljs.registerLanguage('python', python);
 
@@ -48,7 +52,7 @@ def get_user(
 
 const counterProcedureTime = ref(0);
 
-const procedureTime = ref("00:00:00");
+const procedureTime = ref();
 
 const changeProcedureTime = () => {
   counterProcedureTime.value++;
@@ -58,10 +62,10 @@ const changeProcedureTime = () => {
   } else {
     hour = Math.floor(counterProcedureTime.value / 3600);
   }
-  if (Math.floor(counterProcedureTime.value / 60) < 10) {
-    min = `0${Math.floor(counterProcedureTime.value / 60)}`;
+  if (Math.floor((counterProcedureTime.value % 3600) / 60) < 10) {
+    min = `0${Math.floor((counterProcedureTime.value % 3600) / 60)}`;
   } else {
-    min = Math.floor(counterProcedureTime.value / 60);
+    min = Math.floor((counterProcedureTime.value % 3600) / 60);
   }
   if (counterProcedureTime.value % 60 < 10) {
     sec = `0${counterProcedureTime.value % 60}`;
@@ -71,11 +75,19 @@ const changeProcedureTime = () => {
   procedureTime.value = (`${hour}:${min}:${sec}`);
 };
 
+changeProcedureTime();
+
 setInterval(changeProcedureTime, 1000);
+
+const mainStore = useMainStore();
+
+const { uiState, uiModeSpacex } = storeToRefs(mainStore);
+
 </script>
 
 <template>
   <div class="home-page">
+    <TheHeader />
     <div class="procedures">
       <div class="procedure">
         <svg class="procedure-icon" width="16" height="16" viewBox="0 0 24 25" fill="none"
@@ -146,7 +158,7 @@ setInterval(changeProcedureTime, 1000);
         </n-ellipsis>
       </div>
       <div class="procedure">
-        <svg class="procedure-icon" width="12" height="12" viewBox="0 0 24 25" fill="none"
+        <svg class="procedure-icon" width="16" height="16" viewBox="0 0 24 25" fill="none"
           xmlns="http://www.w3.org/2000/svg">
           <path
             d="M20.1775 18.5997C20.8787 19.1489 21.903 19.03 22.3533 18.2617C23.2215 16.78 23.7649 15.1236 23.939 13.4026C24.1675 11.1447 23.751 8.86822 22.7378 6.83745C21.7247 4.80668 20.1564 3.10485 18.2151 1.92943C16.7354 1.03355 15.0852 0.471494 13.3793 0.274064C12.4946 0.171688 11.7836 0.918639 11.8007 1.80906C11.8177 2.69953 12.5591 3.39245 13.4377 3.5384C14.5322 3.72017 15.5872 4.10872 16.5446 4.68839C17.9642 5.54789 19.111 6.79232 19.8518 8.27732C20.5927 9.76227 20.8972 11.4269 20.7302 13.078C20.6175 14.1915 20.2934 15.2681 19.7805 16.2518C19.3687 17.0415 19.4764 18.0506 20.1775 18.5997Z"
@@ -168,14 +180,16 @@ setInterval(changeProcedureTime, 1000);
       <div class="procedure-header">
         <div class="step-buttons">
           <NButton class="previous-step" ghost color="white">
-            <svg width="16" height="16" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="16" height="16" viewBox="0 0 32 33" fill="none"
+              xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M32 14.2646H7.66L18.84 3.08465L16 0.264648L0 16.2646L16 32.2646L18.82 29.4446L7.66 18.2646H32V14.2646Z"
                 fill="white" />
             </svg>
           </NButton>
           <NButton class="next-step" ghost color="white">
-            <svg width="16" height="16" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="16" height="16" viewBox="0 0 32 33" fill="none"
+              xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M1.22392e-06 18.2646L24.34 18.2646L13.16 29.4446L16 32.2646L32 16.2646L16 0.264647L13.18 3.08465L24.34 14.2646L1.57361e-06 14.2646L1.22392e-06 18.2646Z"
                 fill="white" />
@@ -202,7 +216,8 @@ setInterval(changeProcedureTime, 1000);
         <NScrollbar>
           <div class="procedure-step">
             <div class="step-header">
-              <svg width="18" height="19" viewBox="0 0 36 37" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg width="18" height="19" viewBox="0 0 36 37" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M30.2662 27.7672C31.3179 28.5909 32.8544 28.4126 33.5298 27.26C34.8321 25.0376 35.6472 22.553 35.9084 19.9715C36.2511 16.5846 35.6263 13.1699 34.1066 10.1238C32.5869 7.07766 30.2345 4.52493 27.3225 2.7618C25.1029 1.41799 22.6277 0.574915 20.0689 0.278772C18.7418 0.125208 17.6753 1.24563 17.7009 2.58126C17.7265 3.91696 18.8386 4.95632 20.1565 5.17526C21.7982 5.4479 23.3807 6.03073 24.8168 6.90023C26.9462 8.18948 28.6663 10.0561 29.7776 12.2836C30.8889 14.511 31.3457 17.0079 31.0951 19.4845C30.9261 21.1548 30.44 22.7697 29.6705 24.2453C29.0529 25.4298 29.2144 26.9434 30.2662 27.7672Z"
                   fill="#FFB74B" />
@@ -229,7 +244,8 @@ setInterval(changeProcedureTime, 1000);
 
           <div class="procedure-step">
             <div class="step-header">
-              <svg width="18" height="19" viewBox="0 0 36 37" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg width="18" height="19" viewBox="0 0 36 37" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M30.2662 27.7672C31.3179 28.5909 32.8544 28.4126 33.5298 27.26C34.8321 25.0376 35.6472 22.553 35.9084 19.9715C36.2511 16.5846 35.6263 13.1699 34.1066 10.1238C32.5869 7.07766 30.2345 4.52493 27.3225 2.7618C25.1029 1.41799 22.6277 0.574915 20.0689 0.278772C18.7418 0.125208 17.6753 1.24563 17.7009 2.58126C17.7265 3.91696 18.8386 4.95632 20.1565 5.17526C21.7982 5.4479 23.3807 6.03073 24.8168 6.90023C26.9462 8.18948 28.6663 10.0561 29.7776 12.2836C30.8889 14.511 31.3457 17.0079 31.0951 19.4845C30.9261 21.1548 30.44 22.7697 29.6705 24.2453C29.0529 25.4298 29.2144 26.9434 30.2662 27.7672Z"
                   fill="#20FBFD" />
@@ -344,9 +360,15 @@ setInterval(changeProcedureTime, 1000);
 <style scoped lang="scss">
 .home-page {
   display: grid;
+  grid-template-rows: 10vh auto;
   grid-template-columns: 1fr 6fr 10fr;
   justify-items: center;
   height: 95%;
+
+  header {
+    width: 100%;
+    grid-column: 1/-1;
+  }
 
   .procedures {
     border-right: 1px solid #adb0c2;
@@ -382,7 +404,7 @@ setInterval(changeProcedureTime, 1000);
     border-right: 1px solid #adb0c2;
     width: 100%;
     display: grid;
-    grid-template-rows: 13vh 70vh;
+    grid-template-rows: 12vh 69vh;
 
     @media (min-height: 900px) {
       grid-template-rows: 13vh 71vh;

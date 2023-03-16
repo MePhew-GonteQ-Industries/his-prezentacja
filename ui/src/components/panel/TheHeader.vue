@@ -1,6 +1,41 @@
 <script setup lang="ts">
 import { NButton } from "naive-ui";
 import { PhList } from "@phosphor-icons/vue";
+import { ref } from 'vue';
+
+const counterTargetT = ref(5050);
+
+const targetT = ref();
+
+const changeTargetT = () => {
+  if (counterTargetT.value > 0) {
+    counterTargetT.value--;
+  } else {
+    counterTargetT.value = 5050;
+  }
+
+  let hour, min, sec;
+  if (Math.floor(counterTargetT.value / 3600) < 10) {
+    hour = `0${Math.floor(counterTargetT.value / 3600)}`;
+  } else {
+    hour = Math.floor(counterTargetT.value / 3600);
+  }
+  if (Math.floor((counterTargetT.value % 3600) / 60) < 10) {
+    min = `0${Math.floor((counterTargetT.value % 3600) / 60)}`;
+  } else {
+    min = Math.floor((counterTargetT.value % 3600) / 60);
+  }
+  if (counterTargetT.value % 60 < 10) {
+    sec = `0${counterTargetT.value % 60}`;
+  } else {
+    sec = counterTargetT.value % 60;
+  }
+  targetT.value = (`${hour}:${min}:${sec}`);
+};
+
+changeTargetT();
+
+setInterval(changeTargetT, 1000);
 </script>
 
 <template>
@@ -12,7 +47,7 @@ import { PhList } from "@phosphor-icons/vue";
     </div>
     <div class="time-to-target">
       <p class="time-title">Splashdown time</p>
-      <p class="time-left">T - 01:24:51</p>
+      <p class="time-left">T - {{ targetT }}</p>
     </div>
     <div class="orbit-data-container">
       <div class="orbit-data">
@@ -80,6 +115,7 @@ header {
     .time-left {
       font-size: 1.4rem;
       font-weight: bold;
+      width: 135px;
     }
   }
 

@@ -1,5 +1,41 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router';
+import { NSwitch } from 'naive-ui';
+import type { CSSProperties } from 'vue';
+import { useMainStore } from '@/stores/main';
+
+const railStyle = ({
+  focused,
+  checked
+}: {
+  focused: boolean
+  checked: boolean
+}): CSSProperties => {
+  const style: CSSProperties = {}
+  if (checked) {
+    style.background = '#020738';
+    if (focused) {
+      style.boxShadow = '0 0 0 2px white';
+    }
+  } else {
+    style.background = '#020738'
+    if (focused) {
+      style.boxShadow = '0 0 0 2px white';
+    }
+  }
+  return style;
+}
+
+const mainStore = useMainStore();
+
+const updateUiState = (value: boolean) => {
+  if (value) {
+    mainStore.uiState = 'bisagex';
+  } else {
+    mainStore.uiState = 'spacex';
+  }
+}
+
 </script>
 
 
@@ -17,7 +53,7 @@ import { RouterLink } from 'vue-router';
           <circle cx="22.4268" cy="16.2646" r="6" fill="white" />
         </svg>
       </router-link>
-      <router-link :to="{ name: 'gameSpectator' }">
+      <router-link :to="{ name: 'placeholder' }">
         <svg width="40" height="40" viewBox="0 0 81 81" fill="none"
           xmlns="http://www.w3.org/2000/svg">
           <path
@@ -51,7 +87,7 @@ import { RouterLink } from 'vue-router';
         </svg>
 
       </router-link>
-      <router-link :to="{ name: 'game' }">
+      <router-link :to="{ name: 'placeholder' }">
         <svg width="40" height="40" viewBox="0 0 81 81" fill="none"
           xmlns="http://www.w3.org/2000/svg">
           <path fill-rule="evenodd" clip-rule="evenodd"
@@ -63,7 +99,7 @@ import { RouterLink } from 'vue-router';
         </svg>
 
       </router-link>
-      <router-link to="kwakwa">
+      <router-link :to="{ name: 'settings' }">
         <svg width="40" height="40" viewBox="0 0 81 81" fill="none"
           xmlns="http://www.w3.org/2000/svg">
           <path opacity="0.9" fill-rule="evenodd" clip-rule="evenodd"
@@ -83,7 +119,15 @@ import { RouterLink } from 'vue-router';
       </div>
 
       <div class="current-status-container">
-        <p class="status-value">Trunk jettison and deorbit burn enabled</p>
+        <!-- <p class="status-value">Trunk jettison and deorbit burn enabled</p> -->
+        <n-switch :rail-style="railStyle" size="large" @update-value="updateUiState">
+          <template #checked>
+            BisageX
+          </template>
+          <template #unchecked>
+            SpaceX
+          </template>
+        </n-switch>
       </div>
 
       <div class="pointing-mode-container">
@@ -171,10 +215,13 @@ import { RouterLink } from 'vue-router';
 footer {
   background-color: #111B52;
   display: flex;
-  border-bottom: 1px solid white;
   margin-bottom: 2px;
   display: grid;
   grid-template-columns: 27vw 46vw 27vw;
+
+  @media (max-height: 800px) {
+    border-bottom: 1px solid white;
+  }
 
   nav {
     margin-left: 2rem;

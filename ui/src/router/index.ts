@@ -14,15 +14,25 @@ const router = createRouter({
           component: () => import('@/components/panel/pages/TheHomePage.vue'),
         },
         {
+          path: 'settings',
+          name: 'settings',
+          component: () => import('@/views/SettingsView.vue'),
+        },
+        {
           path: 'game-spectator',
           name: 'gameSpectator',
           component: () => import('@/views/GameViewSpectator.vue'),
         },
+        {
+          path: 'placeholder',
+          name: 'placeholder',
+          component: () => import('@/views/PlaceholderView.vue'),
+        },
       ],
     },
     {
-      path: '/name',
-      name: 'name',
+      path: '/join-game',
+      name: 'joinGame',
       component: () => import('@/views/JoinGameView.vue'),
     },
     {

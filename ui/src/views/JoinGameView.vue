@@ -10,7 +10,7 @@ const name = ref();
 
 const router = useRouter();
 
-const socket = io('http://localhost:4000');
+const socket = io('http://192.168.1.2:4000');
 
 socket.emit('joinRoom', 'players');
 
@@ -37,9 +37,10 @@ const saveName = () => {
     <div class="name-view-wrapper">
         <div class="name-box">
             <h1>Podaj swoje imię</h1>
-            <n-input v-model:value="name" type="text" size="large" placeholder="Podaj imię" class="name-input"
-                :bordered="false"></n-input>
-            <n-button color="#020738" size="large" class="save-button" @click="saveName">Zapisz</n-button>
+            <n-input v-model:value="name" type="text" size="large" placeholder="Podaj imię"
+                class="name-input" :bordered="false"></n-input>
+            <n-button color="#020738" size="large" class="save-button"
+                @click="saveName">Zapisz</n-button>
         </div>
     </div>
 </template>
@@ -48,7 +49,7 @@ const saveName = () => {
 .name-view-wrapper {
     overflow: hidden;
     color: white;
-    background-color: #020738;
+    background-color: #111B52;
     height: 100svh;
     width: 100vw;
     display: flex;
@@ -57,8 +58,8 @@ const saveName = () => {
 
     .name-box {
         background-color: #111B52;
-        width: 80%;
-        height: 60%;
+        width: 100%;
+        height: 100%;
         border: 1px solid white;
         display: flex;
         justify-content: center;
