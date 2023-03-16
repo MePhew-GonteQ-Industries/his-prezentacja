@@ -16,7 +16,7 @@ const messagePlacement = ref<MessageProviderProps["placement"]>("top");
 <template>
   <n-config-provider :theme="darkTheme" :hljs="hljs">
     <n-loading-bar-provider>
-      <n-message-provider :placement="messagePlacement">
+      <n-message-provider :placement="messagePlacement" :max="1">
         <RouterView />
       </n-message-provider>
     </n-loading-bar-provider>

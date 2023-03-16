@@ -6,6 +6,15 @@ import { ref } from 'vue';
 const counterTargetT = ref(1800);
 
 const targetT = ref();
+const interialVelocity = ref(69);
+const altitude = ref(32);
+const apogee = ref(25);
+const perigee = ref(47);
+const inclination = ref(62);
+
+const getRandomNumber = (min: number, max: number) => {
+  return Math.floor(Math.random() * (max - min) + min);
+};
 
 const changeTargetT = () => {
   if (counterTargetT.value > 0) {
@@ -33,9 +42,19 @@ const changeTargetT = () => {
   targetT.value = (`${hour}:${min}:${sec}`);
 };
 
+const changeData = () => {
+  interialVelocity.value = getRandomNumber(0, 100);
+  altitude.value = getRandomNumber(0, 100);
+  apogee.value = getRandomNumber(0, 100);
+  perigee.value = getRandomNumber(0, 100);
+  inclination.value = getRandomNumber(0, 100);
+};
+
 changeTargetT();
+changeData();
 
 setInterval(changeTargetT, 1000);
+setInterval(changeData, 2500);
 </script>
 
 <template>
@@ -52,23 +71,23 @@ setInterval(changeTargetT, 1000);
     <div class="orbit-data-container">
       <div class="orbit-data">
         <p class="data-title">Inertial velocity</p>
-        <p class="data-content">7.69km/s</p>
+        <p class="data-content">7.{{ interialVelocity }}km/s</p>
       </div>
       <div class="orbit-data">
         <p class="data-title">Altitude</p>
-        <p class="data-content">393.3km</p>
+        <p class="data-content">393.{{ altitude }}km</p>
       </div>
       <div class="orbit-data">
         <p class="data-title">Apogee</p>
-        <p class="data-content">416.2km</p>
+        <p class="data-content">416.{{ apogee }}km</p>
       </div>
       <div class="orbit-data">
         <p class="data-title">Perigee</p>
-        <p class="data-content">379.4km</p>
+        <p class="data-content">379.{{ perigee }}km</p>
       </div>
       <div class="orbit-data">
         <p class="data-title">Inclination</p>
-        <p class="data-content">51.62°</p>
+        <p class="data-content">51.{{ inclination }}°</p>
       </div>
     </div>
   </header>
