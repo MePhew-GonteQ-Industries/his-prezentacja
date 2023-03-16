@@ -3,17 +3,23 @@ import { Application, Sprite, ParticleContainer, Rectangle } from 'pixi.js';
 import falcon9 from '@/components/sprites/falcon_9_block_5_legs_deployed.png';
 import particle from '@/components/sprites/particle.png';
 import fire from '@/components/sprites/fire.png';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, onUnmounted } from 'vue';
 import * as particleSettings from '@/emitter.json';
 import { Emitter, upgradeConfig } from '@pixi/particle-emitter';
 import { PhCornersOut } from '@phosphor-icons/vue';
 import { NButton } from 'naive-ui';
+import { useMainStore } from '@/stores/main';
+import { storeToRefs } from 'pinia';
 
 let pixieCanvas: HTMLCanvasElement;
 let app: Application;
 let falcon9Sprite: Sprite;
 let emitter_left: Emitter;
 let emitter_right: Emitter;
+
+const mainStore = useMainStore();
+
+const { socket } = storeToRefs(mainStore);
 
 function resize() {
     // const width =
@@ -39,14 +45,26 @@ function resize() {
     }
 }
 
+const sendPos = () => {
+    socket.value.emit('posX', falcon9Sprite.x);
+    socket.value.emit('posY', falcon9Sprite.y);
+    socket.value.emit('rotation', falcon9Sprite.rotation);
+};
+
 onMounted(() => {
     pixieCanvas = document.getElementById('pixi-canvas') as HTMLCanvasElement;
+
+    const interval = setInterval(sendPos, 300);
 
     app = new Application({
         view: pixieCanvas,
         resolution: window.devicePixelRatio || 1,
         autoDensity: true,
         backgroundColor: 0x111B52,
+    });
+
+    onUnmounted(() => {
+        clearInterval(interval);
     });
 
     window.addEventListener('resize', resize);
