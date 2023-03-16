@@ -3,33 +3,43 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { NInput, NButton, useMessage } from 'naive-ui';
 import { io } from 'socket.io-client';
+import { useMainStore } from '@/stores/main';
+import { storeToRefs } from 'pinia';
 
 const messageBox = useMessage();
+
+const mainStore = useMainStore();
+
+const { socket } = storeToRefs(mainStore);
+
+console.log(socket);
+
+if (!socket.value) {
+    socket.value = io('http://localhost:4000');
+    console.log(socket.value);
+}
 
 const name = ref();
 
 const router = useRouter();
 
-const socket = io('http://localhost:4000');
+socket.value.emit('joinRoom', 'players');
 
-socket.emit('joinRoom', 'players');
-
-socket.on("message", (message: string) => {
+socket.value.on("message", (message: string) => {
     messageBox.info(message);
 });
 
-socket.on("nameRegistered", (message: string) => {
+socket.value.on("nameRegistered", (message: string) => {
     messageBox.success(message);
     router.push('game');
 });
 
-socket.on("nameNotRegistered", (message: string) => {
+socket.value.on("nameNotRegistered", (message: string) => {
     messageBox.error(message);
 });
 
 const saveName = () => {
-
-    socket.emit('saveName', name.value);
+    socket.value.emit('saveName', name.value);
 };
 </script>
 
