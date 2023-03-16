@@ -184,9 +184,8 @@ const nextStep = () => {
     <TheHeader />
     <div class="procedures">
       <template v-for="procedure, index in ui[uiState].procedures" :key="procedure.name">
-        <ProcedureComponent :current="index === currentProcedure[uiState]"
-          @click="updateProcedure(index)">{{
-            procedure.name }}
+        <ProcedureComponent :current="index === currentProcedure[uiState]" @click="updateProcedure(index)">{{
+          procedure.name }}
         </ProcedureComponent>
       </template>
     </div>
@@ -195,16 +194,14 @@ const nextStep = () => {
       <div class="procedure-header">
         <div class="step-buttons">
           <NButton class="previous-step" ghost color="white" @click="previousStep">
-            <svg width="16" height="16" viewBox="0 0 32 33" fill="none"
-              xmlns="http://www.w3.org/2000/svg">
+            <svg width="16" height="16" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M32 14.2646H7.66L18.84 3.08465L16 0.264648L0 16.2646L16 32.2646L18.82 29.4446L7.66 18.2646H32V14.2646Z"
                 fill="white" />
             </svg>
           </NButton>
           <NButton class="next-step" ghost color="white" @click="nextStep">
-            <svg width="16" height="16" viewBox="0 0 32 33" fill="none"
-              xmlns="http://www.w3.org/2000/svg">
+            <svg width="16" height="16" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M1.22392e-06 18.2646L24.34 18.2646L13.16 29.4446L16 32.2646L32 16.2646L16 0.264647L13.18 3.08465L24.34 14.2646L1.57361e-06 14.2646L1.22392e-06 18.2646Z"
                 fill="white" />
@@ -231,8 +228,7 @@ const nextStep = () => {
         <NScrollbar>
           <div class="procedure-step">
             <div class="step-header">
-              <svg width="18" height="19" viewBox="0 0 36 37" fill="none"
-                xmlns="http://www.w3.org/2000/svg">
+              <svg width="18" height="19" viewBox="0 0 36 37" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M30.2662 27.7672C31.3179 28.5909 32.8544 28.4126 33.5298 27.26C34.8321 25.0376 35.6472 22.553 35.9084 19.9715C36.2511 16.5846 35.6263 13.1699 34.1066 10.1238C32.5869 7.07766 30.2345 4.52493 27.3225 2.7618C25.1029 1.41799 22.6277 0.574915 20.0689 0.278772C18.7418 0.125208 17.6753 1.24563 17.7009 2.58126C17.7265 3.91696 18.8386 4.95632 20.1565 5.17526C21.7982 5.4479 23.3807 6.03073 24.8168 6.90023C26.9462 8.18948 28.6663 10.0561 29.7776 12.2836C30.8889 14.511 31.3457 17.0079 31.0951 19.4845C30.9261 21.1548 30.44 22.7697 29.6705 24.2453C29.0529 25.4298 29.2144 26.9434 30.2662 27.7672Z"
                   fill="#FFB74B" />
@@ -259,8 +255,7 @@ const nextStep = () => {
 
           <div class="procedure-step">
             <div class="step-header">
-              <svg width="18" height="19" viewBox="0 0 36 37" fill="none"
-                xmlns="http://www.w3.org/2000/svg">
+              <svg width="18" height="19" viewBox="0 0 36 37" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M30.2662 27.7672C31.3179 28.5909 32.8544 28.4126 33.5298 27.26C34.8321 25.0376 35.6472 22.553 35.9084 19.9715C36.2511 16.5846 35.6263 13.1699 34.1066 10.1238C32.5869 7.07766 30.2345 4.52493 27.3225 2.7618C25.1029 1.41799 22.6277 0.574915 20.0689 0.278772C18.7418 0.125208 17.6753 1.24563 17.7009 2.58126C17.7265 3.91696 18.8386 4.95632 20.1565 5.17526C21.7982 5.4479 23.3807 6.03073 24.8168 6.90023C26.9462 8.18948 28.6663 10.0561 29.7776 12.2836C30.8889 14.511 31.3457 17.0079 31.0951 19.4845C30.9261 21.1548 30.44 22.7697 29.6705 24.2453C29.0529 25.4298 29.2144 26.9434 30.2662 27.7672Z"
                   fill="#20FBFD" />
