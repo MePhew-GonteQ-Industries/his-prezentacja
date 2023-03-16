@@ -1,55 +1,15 @@
 <script setup lang="ts">
 import { NButton, NScrollbar, NCode } from "naive-ui";
 import { ref } from "vue";
-import hljs from 'highlight.js/lib/core';
-import python from 'highlight.js/lib/languages/python';
 import TheHeader from '@/components/panel/TheHeader.vue';
 import { useMainStore } from '@/stores/main';
 import { storeToRefs } from "pinia";
 import ProcedureComponent from '@/components/panel/ProcedureComponent.vue';
-
-
-hljs.registerLanguage('python', python);
-
-const exampleCode = `
-def get_user(
-    request: Request,
-    token: str = Depends(oauth2_scheme),
-    db: Session = Depends(get_db),
-    user_agent: str | None = Header(None),
-) -> UserSession:
-    payload = decode_jwt(token, expected_token_type=TokenType.access_token)
-    user = db.query(models.User).where(models.User.id == payload.user_id).first()
-
-    if not user:
-        raise UserNotFoundException()
-
-    sessions_db = (
-        db.query(models.Session).where(models.Session.user_id == user.id).all()
-    )
-
-    session_db = None
-
-    for session in sessions_db:
-        if compare_digest(session.access_token, token):
-            session_db = session
-            break
-
-    if not session_db:
-        raise SessionNotFoundHTTPException()
-
-    session_db.last_accessed = datetime.utcnow()
-    session_db.last_user_agent = user_agent
-    session_db.last_ip_address = request.client.host
-    db.commit()
-
-    if user.disabled:
-        raise AccountDisabledHTTPException()
-
-    user_session = UserSession(user=user, session=session_db)
-
-    return user_session
-`;
+import ProcedureInterruptStep from '@/components/panel/ProcedureInterruptStep.vue';
+import ProcedurePreparationStep from '@/components/panel/ProcedurePreparationStep.vue';
+import ProcedureChecklist from '@/components/panel/ProcedureChecklist.vue';
+import CodeSlide from '@/components/panel/slides/CodeSlide.vue';
+import GlobeSlide from '@/components/panel/slides/GlobeSlide.vue';
 
 const counterProcedureTime = ref(0);
 
@@ -82,37 +42,137 @@ setInterval(changeProcedureTime, 1000);
 
 const mainStore = useMainStore();
 
-const { uiState, uiModeSpacex } = storeToRefs(mainStore);
+const { uiState } = storeToRefs(mainStore);
 
 const ui = {
   'spacex': {
     procedures: [
       {
         name: 'Deport & burn',
-        steps: [],
-        feature: null,
+        steps: {
+          interrupt: {
+            name: 'Wow, so empty',
+            steps: []
+          },
+          preparation: {
+            name: 'Fill me with joy',
+            steps: [],
+          },
+        },
+        feature: {
+          currentSlide: 0,
+          slides: [],
+        },
       },
       {
         name: 'Coast to Trunk Jettison',
-        steps: [
-
-        ],
-        feature: null,
+        steps: {
+          interrupt: {
+            name: 'crew interrupt conditions',
+            steps: [
+              {
+                name: '30° sustained altitude error',
+                value: 'FAR FIELD POINTING',
+              },
+              {
+                name: '600°/m altitude rate',
+                value: 'FAR FIELD POINTING',
+              },
+            ]
+          },
+          preparation: {
+            name: 'Crew Deorbit Preparations',
+            steps: [
+              {
+                name: 'Deorbit burn - 3hrs',
+                value: 'On SpaceX, On, Begin Procedure 4.700',
+              },
+              {
+                name: 'NLT Deorbit Burn - 1hr',
+                value: 'Deorbit Burn Brief',
+              },
+              {
+                name: 'NLT Deorbit Burn - 30min',
+                value: 'Review Reference Content',
+              },
+              {
+                name: 'Deorbit, entry and landing Go/No-Go',
+                value: 'Acknowledge',
+              },
+            ]
+          },
+          checklist: [
+            {
+              name: 'Monitor slow to free-flight altitude (Sun+GEO pointing)',
+            },
+            {
+              name: 'After SpaceX GO for deorbit, verify entry is enabled:',
+              entry: {
+                name: 'ENTRY ENABLED',
+                correctValue: 'True',
+                currentValue: 'False',
+              }
+            },
+            {
+              name: 'After entry is enabled, Dragon transitions to Claw',
+            }
+          ]
+        },
+        feature: {
+          currentSlide: 0,
+          slides: [GlobeSlide],
+        },
       },
       {
         name: 'Claw Seperation',
-        steps: [],
-        feature: null,
+        steps: {
+          interrupt: {
+            name: 'Wow, so empty',
+            steps: []
+          },
+          preparation: {
+            name: 'Fill me with joy',
+            steps: [],
+          },
+        },
+        feature: {
+          currentSlide: 0,
+          slides: [],
+        },
       },
       {
         name: 'Procedure',
-        steps: [],
-        feature: null,
+        steps: {
+          interrupt: {
+            name: 'Wow, so empty',
+            steps: []
+          },
+          preparation: {
+            name: 'Fill me with joy',
+            steps: [],
+          },
+        },
+        feature: {
+          currentSlide: 0,
+          slides: [],
+        },
       },
       {
         name: 'Manual Chute Deployment',
-        steps: [],
-        feature: null,
+        steps: {
+          interrupt: {
+            name: 'Wow, so empty',
+            steps: []
+          },
+          preparation: {
+            name: 'Fill me with joy',
+            steps: [],
+          },
+        },
+        feature: {
+          currentSlide: 0,
+          slides: [],
+        },
       },
     ],
   },
@@ -120,38 +180,126 @@ const ui = {
     procedures: [
       {
         name: 'Kodzik',
-        steps: [
-
-        ],
-        feature: null,
+        steps: {
+          interrupt: {
+            name: 'Projekty',
+            steps: [
+              {
+                name: 'Zołza Hairstyles',
+                value: 'W trakcie',
+              },
+              {
+                name: 'Dripsiaga',
+                value: 'Brak kodziku',
+              },
+              {
+                name: 'Dripsiaga Rozkład Jazdy',
+                value: 'Ukończono',
+              },
+              {
+                name: 'Zacznij od wody',
+                value: 'Ukończono',
+              },
+            ]
+          },
+          preparation: {
+            name: 'Zołza Hairstyles',
+            steps: [
+              {
+                name: 'Filtrowanie wizyt',
+                value: '22.03.2022',
+              },
+            ],
+          },
+          checklist: [
+            {
+              name: 'Projekt: Zołza Hairstyles',
+            },
+            {
+              name: '20.03.2022',
+              entry: {
+                name: 'Filtrowanie wizyt',
+                correctValue: 'Zaimplementowano',
+                currentValue: 'Brak',
+              }
+            },
+            {
+              name: 'Wykonać testy jednostkowe',
+            }
+          ]
+        },
+        feature: {
+          currentSlide: 0,
+          slides: [CodeSlide, GlobeSlide],
+        },
       },
       {
         name: 'Kosmos',
-        steps: [
-
-        ],
-        feature: null,
+        steps: {
+          interrupt: {
+            name: 'Wow, so empty',
+            steps: []
+          },
+          preparation: {
+            name: 'Fill me with joy',
+            steps: [],
+          },
+        },
+        feature: {
+          currentSlide: 0,
+          slides: [],
+        },
       },
       {
         name: 'F1',
-        steps: [
-
-        ],
-        feature: null,
+        steps: {
+          interrupt: {
+            name: 'Wow, so empty',
+            steps: []
+          },
+          preparation: {
+            name: 'Fill me with joy',
+            steps: [],
+          },
+        },
+        feature: {
+          currentSlide: 0,
+          slides: [],
+        },
       },
       {
         name: 'Samoloty',
-        steps: [
-
-        ],
-        feature: null,
+        steps: {
+          interrupt: {
+            name: 'Wow, so empty',
+            steps: []
+          },
+          preparation: {
+            name: 'Fill me with joy',
+            steps: [],
+          },
+        },
+        feature: {
+          currentSlide: 0,
+          slides: [],
+        },
       },
       {
         name: 'Gierka',
-        steps: [
-
-        ],
-        feature: null,
+        steps: {
+          interrupt: {
+            name: 'Wow, so empty',
+            steps: []
+          },
+          preparation: {
+            name: 'Fill me with joy',
+            steps: [],
+          },
+        },
+        feature: {
+          currentSlide: 0,
+          slides: [],
+        },
       },
     ],
   }
@@ -177,6 +325,19 @@ const nextStep = () => {
     currentProcedure.value[uiState.value]++;
   }
 }
+
+const previousSlide = () => {
+  if (ui[uiState.value].procedures[currentProcedure.value[uiState.value]].feature.currentSlide > 0) {
+    ui[uiState.value].procedures[currentProcedure.value[uiState.value]].feature.currentSlide--;
+  }
+}
+
+const nextSlide = () => {
+  if (ui[uiState.value].procedures[currentProcedure.value[uiState.value]].feature.currentSlide < ui[uiState.value].procedures[currentProcedure.value[uiState.value]].feature.slides.length - 1) {
+    ui[uiState.value].procedures[currentProcedure.value[uiState.value]].feature.currentSlide++;
+  }
+}
+
 </script>
 
 <template>
@@ -229,118 +390,42 @@ const nextStep = () => {
       </div>
       <div class="procedure-steps">
         <NScrollbar>
-          <div class="procedure-step">
-            <div class="step-header">
-              <svg width="18" height="19" viewBox="0 0 36 37" fill="none"
-                xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M30.2662 27.7672C31.3179 28.5909 32.8544 28.4126 33.5298 27.26C34.8321 25.0376 35.6472 22.553 35.9084 19.9715C36.2511 16.5846 35.6263 13.1699 34.1066 10.1238C32.5869 7.07766 30.2345 4.52493 27.3225 2.7618C25.1029 1.41799 22.6277 0.574915 20.0689 0.278772C18.7418 0.125208 17.6753 1.24563 17.7009 2.58126C17.7265 3.91696 18.8386 4.95632 20.1565 5.17526C21.7982 5.4479 23.3807 6.03073 24.8168 6.90023C26.9462 8.18948 28.6663 10.0561 29.7776 12.2836C30.8889 14.511 31.3457 17.0079 31.0951 19.4845C30.9261 21.1548 30.44 22.7697 29.6705 24.2453C29.0529 25.4298 29.2144 26.9434 30.2662 27.7672Z"
-                  fill="#FFB74B" />
-                <path
-                  d="M12.1191 3.73031C11.6148 2.49319 10.1925 1.88546 9.03403 2.55087C7.56657 3.39388 6.22175 4.44168 5.04154 5.6658C3.30015 7.47207 1.9556 9.6224 1.09418 11.9788C0.232765 14.3354 -0.126518 16.8458 0.0394056 19.3493C0.20536 21.8528 0.892799 24.294 2.05769 26.5161C3.22257 28.7382 4.83915 30.6923 6.80369 32.253C8.76823 33.8136 11.0373 34.9463 13.4654 35.5784C15.8934 36.2105 18.4268 36.328 20.9029 35.9233C22.5811 35.6491 24.2078 35.1391 25.7359 34.4118C26.9422 33.8377 27.2515 32.3221 26.5209 31.2036C25.7904 30.0852 24.2962 29.7945 23.0631 30.3083C22.1214 30.7007 21.1349 30.9834 20.1227 31.1488C18.3121 31.4447 16.4596 31.3587 14.6842 30.8966C12.9087 30.4344 11.2495 29.6061 9.8129 28.4649C8.37638 27.3238 7.19431 25.8949 6.34251 24.27C5.4907 22.645 4.98801 20.86 4.86668 19.0294C4.74534 17.1988 5.00806 15.363 5.63795 13.6399C6.26786 11.9168 7.25101 10.3444 8.52439 9.02358C9.23621 8.28524 10.0299 7.63467 10.8883 7.08346C12.0124 6.36166 12.6233 4.96743 12.1191 3.73031Z"
-                  fill="#FFB74B" />
-                <path
-                  d="M18.4997 23.1586C21.5372 23.1586 23.9997 20.6961 23.9997 17.6586C23.9997 14.6211 21.5372 12.1586 18.4997 12.1586C15.4621 12.1586 12.9997 14.6211 12.9997 17.6586C12.9997 20.6961 15.4621 23.1586 18.4997 23.1586Z"
-                  fill="#FFB74B" />
-              </svg>
-              <p class="step-name">crew interrupt conditions</p>
-            </div>
-            <div class="step">
-              <p class="name">30° sustained altitude error</p>
-              <div class="divider"></div>
-              <p class="value uppercase">far field pointing</p>
-            </div>
-            <div class="step">
-              <p class="name">600°/m altitude rate</p>
-              <div class="divider"></div>
-              <p class="value uppercase">far field pointing</p>
-            </div>
-          </div>
+          <ProcedureInterruptStep
+            :steps="ui[uiState].procedures[currentProcedure[uiState]].steps.interrupt.steps"
+            :name="ui[uiState].procedures[currentProcedure[uiState]].steps.interrupt.name" />
 
-          <div class="procedure-step">
-            <div class="step-header">
-              <svg width="18" height="19" viewBox="0 0 36 37" fill="none"
-                xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M30.2662 27.7672C31.3179 28.5909 32.8544 28.4126 33.5298 27.26C34.8321 25.0376 35.6472 22.553 35.9084 19.9715C36.2511 16.5846 35.6263 13.1699 34.1066 10.1238C32.5869 7.07766 30.2345 4.52493 27.3225 2.7618C25.1029 1.41799 22.6277 0.574915 20.0689 0.278772C18.7418 0.125208 17.6753 1.24563 17.7009 2.58126C17.7265 3.91696 18.8386 4.95632 20.1565 5.17526C21.7982 5.4479 23.3807 6.03073 24.8168 6.90023C26.9462 8.18948 28.6663 10.0561 29.7776 12.2836C30.8889 14.511 31.3457 17.0079 31.0951 19.4845C30.9261 21.1548 30.44 22.7697 29.6705 24.2453C29.0529 25.4298 29.2144 26.9434 30.2662 27.7672Z"
-                  fill="#20FBFD" />
-                <path
-                  d="M12.1191 3.73031C11.6148 2.49319 10.1925 1.88546 9.03403 2.55087C7.56657 3.39388 6.22175 4.44168 5.04154 5.6658C3.30015 7.47207 1.9556 9.6224 1.09418 11.9788C0.232765 14.3354 -0.126518 16.8458 0.0394056 19.3493C0.20536 21.8528 0.892799 24.294 2.05769 26.5161C3.22257 28.7382 4.83915 30.6923 6.80369 32.253C8.76823 33.8136 11.0373 34.9463 13.4654 35.5784C15.8934 36.2105 18.4268 36.328 20.9029 35.9233C22.5811 35.6491 24.2078 35.1391 25.7359 34.4118C26.9422 33.8377 27.2515 32.3221 26.5209 31.2036C25.7904 30.0852 24.2962 29.7945 23.0631 30.3083C22.1214 30.7007 21.1349 30.9834 20.1227 31.1488C18.3121 31.4447 16.4596 31.3587 14.6842 30.8966C12.9087 30.4344 11.2495 29.6061 9.8129 28.4649C8.37638 27.3238 7.19431 25.8949 6.34251 24.27C5.4907 22.645 4.98801 20.86 4.86668 19.0294C4.74534 17.1988 5.00806 15.363 5.63795 13.6399C6.26786 11.9168 7.25101 10.3444 8.52439 9.02358C9.23621 8.28524 10.0299 7.63467 10.8883 7.08346C12.0124 6.36166 12.6233 4.96743 12.1191 3.73031Z"
-                  fill="#20FBFD" />
-                <path
-                  d="M18.4997 23.1586C21.5372 23.1586 23.9997 20.6961 23.9997 17.6586C23.9997 14.6211 21.5372 12.1586 18.4997 12.1586C15.4621 12.1586 12.9997 14.6211 12.9997 17.6586C12.9997 20.6961 15.4621 23.1586 18.4997 23.1586Z"
-                  fill="#20FBFD" />
-              </svg>
+          <ProcedurePreparationStep
+            :steps="ui[uiState].procedures[currentProcedure[uiState]].steps.preparation.steps"
+            :name="ui[uiState].procedures[currentProcedure[uiState]].steps.preparation.name" />
 
-              <p class="step-name">crew deorbit preparations</p>
-            </div>
-            <div class="step">
-              <p class="name">Deorbit burn - 3hrs</p>
-              <div class="divider"></div>
-              <p class="value">On SpaceX, On, begin procedure 4.700</p>
-            </div>
-            <div class="step">
-              <p class="name">NLT Deorbit Burn - 1hr</p>
-              <div class="divider"></div>
-              <p class="value">Deorbit burn brief</p>
-            </div>
-            <div class="step">
-              <p class="name">NLT Deorbit Burn - 30min</p>
-              <div class="divider"></div>
-              <p class="value">Review Reference Content</p>
-            </div>
-            <div class="step">
-              <p class="name">Deorbit, entry and landing Go/No-Go</p>
-              <div class="divider"></div>
-              <p class="value">Acknowledge</p>
-            </div>
-          </div>
-
-          <div class="procedure-step">
-            <ol>
-              <li>
-                <p>Monitor slow to free-flight altitude (Sun+GEO pointing)</p>
-              </li>
-              <li>
-                <p>After SpaceX GO for deorbit, verify entry is enabled:</p>
-                <div class="checklist-container">
-                  <p class="checklist-item">entry enabled</p>
-                  <p class="checklist-correct-value">true</p>
-                  <p class="checklist-current-value">false</p>
-                </div>
-              </li>
-              <li>
-                <p>After entry is enabled, Dragon transitions to Claw</p>
-              </li>
-            </ol>
-          </div>
+          <ProcedureChecklist
+            :steps="ui[uiState].procedures[currentProcedure[uiState]].steps.checklist"
+            v-if="ui[uiState].procedures[currentProcedure[uiState]].steps.checklist" />
         </NScrollbar>
       </div>
     </div>
 
-    <div class="trajectory">
-      <template v-if="true">
-        <img class="globe" src="@/assets/globe.svg" alt="Globe">
-        <div class="target-coordinates">
-          <div class="coordinate">
-            <p class="title">target latitude</p>
-            <p class="value">26°15.00°N</p>
-          </div>
-          <div class="coordinate">
-            <p class="title">target longitude</p>
-            <p class="value">26°15.00°N</p>
-          </div>
-        </div>
-        <div class="camera-mode">
-          <p class="title">camera</p>
-          <p class="mode">Auto - Earth IO</p>
-          <NButton ghost color="white" round size="large" class="camera-settings-btn">settings
-          </NButton>
-        </div>
-      </template>
-      <template v-else>
-        <NCode :code="exampleCode" language="python" show-line-numbers v-if="false" />
-      </template>
+    <div class="feature">
+      <component
+        :is="ui[uiState].procedures[currentProcedure[uiState]].feature.slides[ui[uiState].procedures[currentProcedure[uiState]].feature.currentSlide]" />
+      <div class="step-buttons">
+        <NButton class="previous-step" ghost color="white" @click="previousSlide">
+          <svg width="16" height="16" viewBox="0 0 32 33" fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M32 14.2646H7.66L18.84 3.08465L16 0.264648L0 16.2646L16 32.2646L18.82 29.4446L7.66 18.2646H32V14.2646Z"
+              fill="white" />
+          </svg>
+        </NButton>
+        <NButton class="next-step" ghost color="white" @click="nextSlide">
+          <svg width="16" height="16" viewBox="0 0 32 33" fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M1.22392e-06 18.2646L24.34 18.2646L13.16 29.4446L16 32.2646L32 16.2646L16 0.264647L13.18 3.08465L24.34 14.2646L1.57361e-06 14.2646L1.22392e-06 18.2646Z"
+              fill="white" />
+          </svg>
+        </NButton>
+      </div>
     </div>
   </div>
 </template>
@@ -373,6 +458,19 @@ const nextStep = () => {
 </style>
 
 <style scoped lang="scss">
+.step-buttons {
+  display: flex;
+  gap: .5rem;
+
+  .previous-step,
+  .next-step {
+    width: 50px;
+    height: 50px;
+    border-radius: .375rem;
+    background-color: #111B52;
+  }
+}
+
 .home-page {
   display: grid;
   grid-template-rows: 10vh auto;
@@ -402,19 +500,6 @@ const nextStep = () => {
 
     @media (min-height: 900px) {
       grid-template-rows: 13vh 71vh;
-    }
-
-    .step-buttons {
-      display: flex;
-      gap: .5rem;
-
-      .previous-step,
-      .next-step {
-        width: 50px;
-        height: 50px;
-        border-radius: .375rem;
-        background-color: #111B52;
-      }
     }
 
     .procedure-header {
@@ -457,141 +542,27 @@ const nextStep = () => {
       flex-direction: column;
       gap: 1rem;
       padding: 1rem 0 1rem 1rem;
-
-      .procedure-step {
-        background-color: #111B52;
-        padding: 1rem;
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        margin-right: 1rem;
-
-        .step-header {
-          display: flex;
-          align-items: center;
-          gap: .5rem;
-          border-bottom: 1px solid white;
-          padding: .5rem 0;
-
-          .step-name {
-            text-transform: capitalize;
-            font-weight: bold;
-          }
-        }
-
-        .step {
-          display: flex;
-          align-items: flex-end;
-          width: 100%;
-
-          .name {
-            display: inline-flex;
-          }
-
-          .divider {
-            border-bottom: 1px dashed white;
-            display: inline-flex;
-            flex-grow: 100;
-            margin-bottom: 7px;
-          }
-
-          .value {
-            display: inline-flex;
-            font-weight: bold;
-            text-transform: capitalize;
-
-            &.uppercase {
-              text-transform: uppercase;
-            }
-          }
-        }
-
-        ol {
-          padding: 0 0 0 1rem;
-          display: flex;
-          flex-direction: column;
-          gap: 1rem;
-
-          ::marker {
-            font-weight: bold;
-          }
-
-          p {
-            font-weight: bold;
-          }
-
-          li {
-            .checklist-container {
-              display: flex;
-              border-width: 1px 0 1px 0;
-              border-color: white;
-              border-style: solid;
-              margin-top: .5rem;
-              padding: .5rem 15% .5rem 0;
-              justify-content: space-between;
-
-              .checklist-item {
-                color: #C1C3DF;
-                text-transform: uppercase;
-              }
-
-              .checklist-correct-value {
-                color: #C1C3DF;
-                text-transform: capitalize;
-              }
-
-              .checklist-current-value {
-                text-transform: capitalize;
-              }
-            }
-          }
-        }
-      }
     }
   }
 
-  .trajectory {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  .feature {
+    display: grid;
+    grid-template-rows: 90% 10%;
     justify-content: center;
-    position: relative;
+    width: 100%;
 
-    .globe {
-      width: 55%;
-      pointer-events: none;
-    }
-
-    .target-coordinates {
+    .slide {
+      max-height: 700px;
+      padding: 1rem;
       display: flex;
-      gap: 1rem;
-
-      .coordinate {
-        p {
-          text-transform: uppercase;
-          font-weight: bold;
-        }
-      }
-    }
-
-    .camera-mode {
-      position: absolute;
-      bottom: 5%;
-      right: 5%;
-      display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: .5rem;
+    }
 
-      p {
-        font-weight: bold;
-        text-align: center;
-      }
-
-      .title {
-        text-transform: uppercase;
-      }
+    .step-buttons {
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   }
 }

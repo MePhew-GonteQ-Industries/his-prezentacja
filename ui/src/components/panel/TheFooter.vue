@@ -120,7 +120,8 @@ const updateUiState = (value: boolean) => {
 
       <div class="current-status-container">
         <!-- <p class="status-value">Trunk jettison and deorbit burn enabled</p> -->
-        <n-switch :rail-style="railStyle" size="large" @update-value="updateUiState">
+        <n-switch :rail-style="railStyle" size="large" @update-value="updateUiState"
+          class="switch-ui-state">
           <template #checked>
             BisageX
           </template>
@@ -210,6 +211,14 @@ const updateUiState = (value: boolean) => {
     </div>
   </footer>
 </template>
+
+<style lang="scss">
+.switch-ui-state {
+  div {
+    font-weight: bold;
+  }
+}
+</style>
 
 <style scoped lang="scss">
 footer {
