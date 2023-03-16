@@ -1,8 +1,13 @@
 <script setup lang="ts">
+import { NEllipsis } from 'naive-ui';
+
+const props = defineProps({
+  current: Boolean,
+});
 </script>
 
 <template>
-  <div class="procedure">
+  <div class="procedure" :class="{ current: props.current }">
     <svg class="procedure-icon" width="16" height="16" viewBox="0 0 24 25" fill="none"
       xmlns="http://www.w3.org/2000/svg">
       <path
@@ -15,8 +20,8 @@
         d="M12.3332 15.5273C14.3582 15.5273 15.9999 13.8857 15.9999 11.8607C15.9999 9.83563 14.3582 8.19398 12.3332 8.19398C10.3081 8.19398 8.66649 9.83563 8.66649 11.8607C8.66649 13.8857 10.3081 15.5273 12.3332 15.5273Z"
         fill="white" />
     </svg>
-    <n-ellipsis class="procedure-name" :line-clamp="2" :tooltip="false">
-      <slot></slot>
+    <n-ellipsis class="procedure-name" :line-clamp="2" :tooltip="false" default="kwakwa">
+      <slot />
     </n-ellipsis>
   </div>
 </template>

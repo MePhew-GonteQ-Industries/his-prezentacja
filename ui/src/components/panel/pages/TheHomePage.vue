@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NButton, NEllipsis, NScrollbar, NCode } from "naive-ui";
+import { NButton, NScrollbar, NCode } from "naive-ui";
 import { ref } from "vue";
 import hljs from 'highlight.js/lib/core';
 import python from 'highlight.js/lib/languages/python';
@@ -84,28 +84,117 @@ const mainStore = useMainStore();
 
 const { uiState, uiModeSpacex } = storeToRefs(mainStore);
 
+const ui = {
+  'spacex': {
+    procedures: [
+      {
+        name: 'Deport & burn',
+        steps: [],
+        feature: null,
+      },
+      {
+        name: 'Coast to Trunk Jettison',
+        steps: [
+
+        ],
+        feature: null,
+      },
+      {
+        name: 'Claw Seperation',
+        steps: [],
+        feature: null,
+      },
+      {
+        name: 'Procedure',
+        steps: [],
+        feature: null,
+      },
+      {
+        name: 'Manual Chute Deployment',
+        steps: [],
+        feature: null,
+      },
+    ],
+  },
+  'bisagex': {
+    procedures: [
+      {
+        name: 'Kodzik',
+        steps: [
+
+        ],
+        feature: null,
+      },
+      {
+        name: 'Kosmos',
+        steps: [
+
+        ],
+        feature: null,
+      },
+      {
+        name: 'F1',
+        steps: [
+
+        ],
+        feature: null,
+      },
+      {
+        name: 'Samoloty',
+        steps: [
+
+        ],
+        feature: null,
+      },
+      {
+        name: 'Gierka',
+        steps: [
+
+        ],
+        feature: null,
+      },
+    ],
+  }
+};
+
+const currentProcedure = ref({
+  'spacex': 1,
+  'bisagex': 0,
+});
+
+const updateProcedure = (index: Number) => {
+  currentProcedure.value[uiState.value] = index;
+}
+
+const previousStep = () => {
+  if (currentProcedure.value[uiState.value] > 0) {
+    currentProcedure.value[uiState.value]--;
+  }
+}
+
+const nextStep = () => {
+  if (currentProcedure.value[uiState.value] < ui[uiState.value].procedures.length - 1) {
+    currentProcedure.value[uiState.value]++;
+  }
+}
 </script>
 
 <template>
   <div class="home-page">
     <TheHeader />
     <div class="procedures">
-      <template v-if="uiModeSpacex">
-        <ProcedureComponent>Deport & burn</ProcedureComponent>
-        <ProcedureComponent>Coast to Trunk Jettison</ProcedureComponent>
-        <ProcedureComponent>Claw Seperation</ProcedureComponent>
-        <ProcedureComponent>Procedure</ProcedureComponent>
-        <ProcedureComponent>Manual Chute Deployment</ProcedureComponent>
-      </template>
-      <template v-else>
-
+      <template v-for="procedure, index in ui[uiState].procedures" :key="procedure.name">
+        <ProcedureComponent :current="index === currentProcedure[uiState]"
+          @click="updateProcedure(index)">{{
+            procedure.name }}
+        </ProcedureComponent>
       </template>
     </div>
 
     <div class="current-procedure">
       <div class="procedure-header">
         <div class="step-buttons">
-          <NButton class="previous-step" ghost color="white">
+          <NButton class="previous-step" ghost color="white" @click="previousStep">
             <svg width="16" height="16" viewBox="0 0 32 33" fill="none"
               xmlns="http://www.w3.org/2000/svg">
               <path
@@ -113,7 +202,7 @@ const { uiState, uiModeSpacex } = storeToRefs(mainStore);
                 fill="white" />
             </svg>
           </NButton>
-          <NButton class="next-step" ghost color="white">
+          <NButton class="next-step" ghost color="white" @click="nextStep">
             <svg width="16" height="16" viewBox="0 0 32 33" fill="none"
               xmlns="http://www.w3.org/2000/svg">
               <path
@@ -122,7 +211,7 @@ const { uiState, uiModeSpacex } = storeToRefs(mainStore);
             </svg>
           </NButton>
         </div>
-        <h1 class="procedure-name">Coast to Trunk Jesttison</h1>
+        <h1 class="procedure-name">{{ ui[uiState].procedures[currentProcedure[uiState]].name }}</h1>
         <div class="procedure-state-container">
           <div class="title-container">
             <p class="procedure-state">running</p>

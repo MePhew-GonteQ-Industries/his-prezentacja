@@ -3,7 +3,7 @@ import { NButton } from "naive-ui";
 import { PhList } from "@phosphor-icons/vue";
 import { ref } from 'vue';
 
-const counterTargetT = ref(5050);
+const counterTargetT = ref(1800);
 
 const targetT = ref();
 
@@ -11,7 +11,7 @@ const changeTargetT = () => {
   if (counterTargetT.value > 0) {
     counterTargetT.value--;
   } else {
-    counterTargetT.value = 5050;
+    counterTargetT.value = 1800;
   }
 
   let hour, min, sec;
