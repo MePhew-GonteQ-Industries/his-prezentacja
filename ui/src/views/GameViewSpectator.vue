@@ -35,8 +35,8 @@ socket.value.on('rotation', (rotation: number, user: string) => {
 
 <template>
     <div>
-
     </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+</style>

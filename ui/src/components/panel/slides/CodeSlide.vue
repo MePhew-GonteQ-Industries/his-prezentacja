@@ -30,6 +30,8 @@ const exampleCode = `def send_upcoming_appointment_notification(
 
 <style scoped>
 .code {
+    display: flex;
+    align-items: center;
     font-size: 1.2rem;
 }
 </style>
