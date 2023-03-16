@@ -33,7 +33,12 @@ io.on("connection", (socket: Socket) => {
   socket.on("joinRoom", (room: string) => {
     socket.join(room);
     console.log(`User with ${socket.id} joined room ${room}`);
-    io.to("players").emit("message", "Witaj w pokoju graczy");
+    if (room === "players") {
+      io.to("players").emit("message", "Witaj w pokoju graczy");
+    }
+    if (room === "spectators") {
+      io.to("spectators").emit("message", "Witaj w pokoju widzów");
+    }
   });
 
   socket.on("disconnect", () => {
@@ -61,6 +66,30 @@ io.on("connection", (socket: Socket) => {
       io.to(names[name]).emit("nameRegistered", "Zapraszamy do gry!");
       console.log(names);
     }
+  });
+
+  socket.on("posX", (posX: number) => {
+    console.log(`PosX: ${posX}`);
+    const user = (Object.keys(names) as (keyof typeof names)[]).find((key) => {
+      return names[key] === socket.id;
+    });
+    io.to("spectators").emit("posX", posX, user);
+  });
+
+  socket.on("posY", (posY: number) => {
+    console.log(`PosY: ${posY}`);
+    const user = (Object.keys(names) as (keyof typeof names)[]).find((key) => {
+      return names[key] === socket.id;
+    });
+    io.to("spectators").emit("posY", posY, user);
+  });
+
+  socket.on("rotation", (rotation: number) => {
+    console.log(`Rotation: ${rotation}`);
+    const user = (Object.keys(names) as (keyof typeof names)[]).find((key) => {
+      return names[key] === socket.id;
+    });
+    io.to("spectators").emit("rotation", rotation, user);
   });
 });
 
