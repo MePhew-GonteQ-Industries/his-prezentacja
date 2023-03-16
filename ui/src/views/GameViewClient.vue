@@ -54,7 +54,7 @@ const sendPos = () => {
 onMounted(() => {
     pixieCanvas = document.getElementById('pixi-canvas') as HTMLCanvasElement;
 
-    const interval = setInterval(sendPos, 300);
+    const interval = setInterval(sendPos, 200);
 
     app = new Application({
         view: pixieCanvas,
