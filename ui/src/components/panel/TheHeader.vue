@@ -115,6 +115,7 @@ header {
     .phase-title {
       text-transform: uppercase;
       font-size: .8rem;
+      width: 100px;
     }
 
     .phase-name {
@@ -139,9 +140,8 @@ header {
   }
 
   .orbit-data-container {
-    margin-left: 15%;
+    margin-left: 10%;
     display: flex;
-    gap: 4rem;
 
     .data-title {
       text-transform: uppercase;
@@ -150,6 +150,7 @@ header {
     .data-content {
       font-size: 1.4rem;
       font-weight: bold;
+      width: 180px;
     }
   }
 }
