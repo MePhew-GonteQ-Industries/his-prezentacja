@@ -36,10 +36,10 @@ const saveName = () => {
 <template>
     <div class="name-view-wrapper">
         <div class="name-box">
-            <h1>Podaj swoje imię</h1>
-            <n-input v-model:value="name" type="text" size="large" placeholder="Podaj imię" class="name-input"
+            <h1>Podaj nick</h1>
+            <n-input v-model:value="name" type="text" size="large" placeholder="nick her" class="name-input"
                 :bordered="false"></n-input>
-            <n-button color="#020738" size="large" class="save-button" @click="saveName">Zapisz</n-button>
+            <n-button color="#020738" size="large" class="save-button" @click="saveName">Graj</n-button>
         </div>
     </div>
 </template>
