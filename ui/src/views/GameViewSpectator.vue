@@ -20,16 +20,8 @@ socket.value.on('message', (message: string) => {
     messageBox.info(message);
 });
 
-socket.value.on('posX', (posX: number, user: string) => {
-    console.log(`PosX: ${posX} for user: ${user}`);
-});
-
-socket.value.on('posY', (posY: number, user: string) => {
-    console.log(`PosY: ${posY} for user: ${user}`);
-});
-
-socket.value.on('rotation', (rotation: number, user: string) => {
-    console.log(`Rotation: ${rotation} for user: ${user}`);
+socket.value.on('position', (posX: number, posY: number, rotation: number, user: string) => {
+    console.log(`PosX: ${posX}, PosY: ${posY}, Rotation: ${rotation} for user: ${user}`);
 });
 </script>
 

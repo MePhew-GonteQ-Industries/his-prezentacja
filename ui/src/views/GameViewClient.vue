@@ -46,9 +46,7 @@ function resize() {
 }
 
 const sendPos = () => {
-    socket.value.emit('posX', falcon9Sprite.x);
-    socket.value.emit('posY', falcon9Sprite.y);
-    socket.value.emit('rotation', falcon9Sprite.rotation);
+    socket.value.emit('position', falcon9Sprite.x, falcon9Sprite.y, falcon9Sprite.rotation);
 };
 
 onMounted(() => {

@@ -68,28 +68,12 @@ io.on("connection", (socket: Socket) => {
     }
   });
 
-  socket.on("posX", (posX: number) => {
-    console.log(`PosX: ${posX}`);
+  socket.on("position", (posX: number, posY: number, rotation: number) => {
+    console.log(`PosX: ${posX}, PosY: ${posY}, Rotation: ${rotation}`);
     const user = (Object.keys(names) as (keyof typeof names)[]).find((key) => {
       return names[key] === socket.id;
     });
-    io.to("spectators").emit("posX", posX, user);
-  });
-
-  socket.on("posY", (posY: number) => {
-    console.log(`PosY: ${posY}`);
-    const user = (Object.keys(names) as (keyof typeof names)[]).find((key) => {
-      return names[key] === socket.id;
-    });
-    io.to("spectators").emit("posY", posY, user);
-  });
-
-  socket.on("rotation", (rotation: number) => {
-    console.log(`Rotation: ${rotation}`);
-    const user = (Object.keys(names) as (keyof typeof names)[]).find((key) => {
-      return names[key] === socket.id;
-    });
-    io.to("spectators").emit("rotation", rotation, user);
+    io.to("spectators").emit("position", posX, posY, rotation, user);
   });
 });
 
