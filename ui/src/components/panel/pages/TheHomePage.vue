@@ -10,6 +10,26 @@ import ProcedurePreparationStep from '@/components/panel/ProcedurePreparationSte
 import ProcedureChecklist from '@/components/panel/ProcedureChecklist.vue';
 import CodeSlide from '@/components/panel/slides/CodeSlide.vue';
 import GlobeSlide from '@/components/panel/slides/GlobeSlide.vue';
+import EmbedSlide from '@/components/panel/slides/EmbedSlide.vue';
+import PhotoSlide from '@/components/panel/slides/PhotoSlide.vue';
+import Falcon9 from '@/assets/f9.jpg';
+import dragon from '@/assets/dragon.jpg';
+import starship1 from '@/assets/starship-1.jpg';
+import dragonRender from '@/assets/dragon-render.jpg';
+import engines from '@/assets/engines.jpg';
+import starshipRender from '@/assets/starship-render.jpg';
+import f1_1 from '@/assets/1.png';
+import f1_2 from '@/assets/2.png';
+import f1_3 from '@/assets/3.png';
+import f1_4 from '@/assets/4.png';
+import f1_5 from '@/assets/5.png';
+import f1_6 from '@/assets/6.png';
+import plane1 from '@/assets/plane1.png';
+import plane2 from '@/assets/plane2.png';
+import poland737 from '@/assets/737-pl.jpg';
+import drgDisplays1 from '@/assets/drg-displays-1.png';
+import drgDisplays2 from '@/assets/drg-displays-2.jpg';
+import drgCrew from '@/assets/drg-crew.jpg';
 
 const counterProcedureTime = ref(0);
 
@@ -55,7 +75,7 @@ const ui = {
             steps: []
           },
           preparation: {
-            name: 'Fill me with joy',
+            name: 'We will all go together when we go',
             steps: [],
           },
         },
@@ -120,7 +140,11 @@ const ui = {
         },
         feature: {
           currentSlide: 0,
-          slides: [GlobeSlide],
+          slides: [
+            {
+              slide: GlobeSlide,
+            }
+          ],
         },
       },
       {
@@ -131,7 +155,7 @@ const ui = {
             steps: []
           },
           preparation: {
-            name: 'Fill me with joy',
+            name: 'We will all go together when we go',
             steps: [],
           },
         },
@@ -148,7 +172,7 @@ const ui = {
             steps: []
           },
           preparation: {
-            name: 'Fill me with joy',
+            name: 'We will all go together when we go',
             steps: [],
           },
         },
@@ -165,7 +189,7 @@ const ui = {
             steps: []
           },
           preparation: {
-            name: 'Fill me with joy',
+            name: 'We will all go together when we go',
             steps: [],
           },
         },
@@ -206,8 +230,20 @@ const ui = {
             name: 'Zołza Hairstyles',
             steps: [
               {
-                name: 'Filtrowanie wizyt',
+                name: 'Feat: Filtrowanie wizyt',
                 value: '22.03.2022',
+              },
+              {
+                name: 'Feat: Zmiana godzin pracy',
+                value: '26.03.2022',
+              },
+              {
+                name: 'Fix: Powiadomienia dla administratorów',
+                value: '01.04.2022',
+              },
+              {
+                name: 'Refactor: Pobieranie umówionych wizyt',
+                value: '20.04.2022',
               },
             ],
           },
@@ -230,75 +266,419 @@ const ui = {
         },
         feature: {
           currentSlide: 0,
-          slides: [CodeSlide, GlobeSlide],
+          slides: [
+            {
+              slide: CodeSlide,
+            },
+            {
+              slide: EmbedSlide,
+              props: {
+                address: 'https://mephew-case-converter.netlify.app/',
+              }
+            },
+            {
+              slide: EmbedSlide,
+              props: {
+                address: 'https://mephew-to-do-list.netlify.app/',
+              }
+            },
+            {
+              slide: EmbedSlide,
+              props: {
+                address: 'https://mephew-flashcards.netlify.app/',
+              }
+            },
+            {
+              slide: EmbedSlide,
+              props: {
+                address: 'https://dripsiaga.pl/timetable/',
+              }
+            },
+            {
+              slide: EmbedSlide,
+              props: {
+                address: 'https://mephew-witryny-data.netlify.app/',
+              }
+            },
+            {
+              slide: EmbedSlide,
+              props: {
+                address: 'https://dripsiaga.pl/',
+              }
+            },
+            {
+              slide: EmbedSlide,
+              props: {
+                address: 'https://zolza-hairstyles.pl/',
+              }
+            },
+            {
+              slide: EmbedSlide,
+              props: {
+                address: 'https://youtube.com',
+              }
+            },
+          ],
         },
       },
       {
         name: 'Kosmos',
         steps: {
           interrupt: {
-            name: 'Wow, so empty',
-            steps: []
+            name: 'Rakiety',
+            steps: [
+              {
+                name: 'Falcon 9 Block 5',
+                value: 'W użyciu',
+              },
+              {
+                name: 'Falcon Heavy',
+                value: 'W użyciu',
+              },
+              {
+                name: 'Starship',
+                value: 'W produkcji',
+              }
+            ]
           },
           preparation: {
-            name: 'Fill me with joy',
-            steps: [],
+            name: 'Nadchodzące starty',
+            steps: [
+              {
+                name: 'Electron • “Stronger Together”',
+                value: '16.03 23:00 (GMT+1)',
+              },
+              {
+                name: 'Falcon 9 • Starlink 2-8',
+                value: '17.03 20:15 (GMT+1)',
+              },
+              {
+                name: 'Falcon 9 • SES 18 & SES 19',
+                value: '17.03 23:00 (GMT+1)',
+              },
+              {
+                name: 'Terran 1 • “Good Luck, Have Fun”',
+                value: 'TBD 06:00 - 09:00 (GMT+1)',
+              },
+            ],
           },
         },
         feature: {
           currentSlide: 0,
-          slides: [],
+          slides: [
+            {
+              slide: PhotoSlide,
+              props: {
+                photo: drgDisplays1,
+              }
+            },
+            {
+              slide: PhotoSlide,
+              props: {
+                photo: drgDisplays2,
+              }
+            },
+            {
+              slide: PhotoSlide,
+              props: {
+                photo: drgCrew,
+              }
+            },
+            {
+              slide: PhotoSlide,
+              props: {
+                photo: dragon,
+              }
+            },
+            {
+              slide: PhotoSlide,
+              props: {
+                photo: dragonRender,
+              }
+            },
+            {
+              slide: PhotoSlide,
+              props: {
+                photo: Falcon9,
+              }
+            },
+            {
+              slide: PhotoSlide,
+              props: {
+                photo: engines,
+              }
+            },
+            {
+              slide: PhotoSlide,
+              props: {
+                photo: starship1,
+              }
+            },
+            {
+              slide: PhotoSlide,
+              props: {
+                photo: starshipRender,
+              }
+            },
+            {
+              slide: EmbedSlide,
+              props: {
+                address: 'https://www.youtube.com/live/ODY6JWzS8WU?feature=share&t=697',
+                mode: 'yt',
+              }
+            },
+          ],
         },
       },
       {
         name: 'F1',
         steps: {
           interrupt: {
-            name: 'Wow, so empty',
-            steps: []
+            name: 'Current Configuration',
+            steps: [
+              {
+                name: 'Mode push',
+                value: 'Engaged',
+              },
+              {
+                name: 'Engage clutch pedal',
+                value: 'Ok',
+              },
+              {
+                name: 'Maintain optimal RPM',
+                value: 'Optimal',
+              },
+              {
+                name: 'ERS',
+                value: 'Overtake',
+              },
+              {
+                name: 'DRS',
+                value: 'Disabled',
+              },
+            ]
           },
           preparation: {
-            name: 'Fill me with joy',
-            steps: [],
+            name: 'Your result',
+            steps: [
+              {
+                name: 'You',
+                value: 'P13',
+              }
+            ],
           },
+          checklist: [
+            {
+              name: 'Jeddah, Saudi Arabia',
+            },
+            {
+              name: 'Max Verstappen [P1]',
+              entry: {
+                name: '35.224',
+                correctValue: '29.119',
+                currentValue: '28.552',
+              }
+            },
+            {
+              name: 'Charles Leclerc [P2]',
+              entry: {
+                name: '34.481',
+                correctValue: '30.642',
+                currentValue: '31.957',
+              }
+            },
+            {
+              name: 'Levis Hamilton [P3]',
+              entry: {
+                name: '36.525',
+                correctValue: '30.512',
+                currentValue: '29.405',
+              }
+            },
+          ]
         },
         feature: {
           currentSlide: 0,
-          slides: [],
+          slides: [
+            {
+              slide: PhotoSlide,
+              props: {
+                photo: f1_1,
+              }
+            },
+            {
+              slide: PhotoSlide,
+              props: {
+                photo: f1_2,
+              }
+            },
+            {
+              slide: PhotoSlide,
+              props: {
+                photo: f1_3,
+              }
+            },
+            {
+              slide: PhotoSlide,
+              props: {
+                photo: f1_4,
+              }
+            },
+            {
+              slide: PhotoSlide,
+              props: {
+                photo: f1_5,
+              }
+            },
+            {
+              slide: PhotoSlide,
+              props: {
+                photo: f1_6,
+              }
+            },
+            {
+              slide: EmbedSlide,
+              props: {
+                address: 'https://youtu.be/er4Ki8I6Drk',
+                mode: 'yt',
+              }
+            },
+            {
+              slide: EmbedSlide,
+              props: {
+                address: 'https://youtu.be/gCivN-b4FZI',
+                mode: 'yt',
+              }
+            },
+            {
+              slide: EmbedSlide,
+              props: {
+                address: 'https://youtu.be/IYndqz5i7mk',
+                mode: 'yt',
+              }
+            },
+            {
+              slide: EmbedSlide,
+              props: {
+                address: 'https://youtu.be/pIrHA0yttBQ',
+                mode: 'yt',
+              }
+            },
+          ],
         },
       },
       {
-        name: 'Samoloty',
+        name: 'Lotnictwo',
         steps: {
           interrupt: {
-            name: 'Wow, so empty',
-            steps: []
+            name: 'Samoloty',
+            steps: [
+              {
+                name: 'B737-800X',
+                value: 'In Flight, POSITION: LAT: 26°15.00°N, LONG: 26°15.00°N',
+              },
+              {
+                name: 'A320-251N',
+                value: 'EPWA, Warsaw Chopin Airport',
+              },
+            ]
           },
           preparation: {
-            name: 'Fill me with joy',
-            steps: [],
+            name: 'Ciekawe lotniska',
+            steps: [
+              {
+                name: 'Santa Cruz, Madera, Portugalia',
+                value: 'LPMA',
+              },
+              {
+                name: 'Jeju, Korea Południowa',
+                value: 'RKPC',
+              },
+              {
+                name: 'Londyn, Wielka Brytania',
+                value: 'EGLL',
+              },
+              {
+                name: 'Changi, Singapur',
+                value: 'WSSS',
+              },
+            ],
           },
+          checklist: [
+            {
+              name: 'Complete Preflight Checklist',
+            },
+            {
+              name: 'Verify set',
+              entry: {
+                name: 'Parking brake',
+                correctValue: 'SET',
+                currentValue: 'unknown',
+              }
+            },
+            {
+              name: 'Verify on',
+              entry: {
+                name: 'Battery switch',
+                correctValue: 'on',
+                currentValue: 'off',
+              }
+            },
+            {
+              name: 'Verify on',
+              entry: {
+                name: 'Electric hydraulic pomps',
+                correctValue: 'on',
+                currentValue: 'unknown',
+              }
+            },
+            {
+              name: 'Verify connected / on',
+              entry: {
+                name: 'Ground power',
+                correctValue: 'connect / on',
+                currentValue: 'connected',
+              }
+            },
+            {
+              name: 'Verify down',
+              entry: {
+                name: 'Landing gear lever',
+                correctValue: 'down',
+                currentValue: 'unknown',
+              }
+            },
+          ]
         },
         feature: {
           currentSlide: 0,
-          slides: [],
-        },
-      },
-      {
-        name: 'Gierka',
-        steps: {
-          interrupt: {
-            name: 'Wow, so empty',
-            steps: []
-          },
-          preparation: {
-            name: 'Fill me with joy',
-            steps: [],
-          },
-        },
-        feature: {
-          currentSlide: 0,
-          slides: [],
+          slides: [
+            {
+              slide: PhotoSlide,
+              props: {
+                photo: plane2,
+              }
+            },
+            {
+              slide: PhotoSlide,
+              props: {
+                photo: poland737,
+              }
+            },
+            {
+              slide: PhotoSlide,
+              props: {
+                photo: plane1,
+              }
+            },
+            {
+              slide: EmbedSlide,
+              props: {
+                address: 'https://youtu.be/-Oth4uMD0c4',
+                mode: 'yt',
+              }
+            },
+          ],
         },
       },
     ],
@@ -311,29 +691,38 @@ const currentProcedure = ref({
 });
 
 const updateProcedure = (index: Number) => {
+  // @ts-expect-error
   currentProcedure.value[uiState.value] = index;
 }
 
 const previousStep = () => {
+  // @ts-expect-error
   if (currentProcedure.value[uiState.value] > 0) {
+    // @ts-expect-error
     currentProcedure.value[uiState.value]--;
   }
 }
 
 const nextStep = () => {
+  // @ts-expect-error
   if (currentProcedure.value[uiState.value] < ui[uiState.value].procedures.length - 1) {
+    // @ts-expect-error
     currentProcedure.value[uiState.value]++;
   }
 }
 
 const previousSlide = () => {
+  // @ts-expect-error
   if (ui[uiState.value].procedures[currentProcedure.value[uiState.value]].feature.currentSlide > 0) {
+    // @ts-expect-error
     ui[uiState.value].procedures[currentProcedure.value[uiState.value]].feature.currentSlide--;
   }
 }
 
 const nextSlide = () => {
+  // @ts-expect-error
   if (ui[uiState.value].procedures[currentProcedure.value[uiState.value]].feature.currentSlide < ui[uiState.value].procedures[currentProcedure.value[uiState.value]].feature.slides.length - 1) {
+    // @ts-expect-error
     ui[uiState.value].procedures[currentProcedure.value[uiState.value]].feature.currentSlide++;
   }
 }
@@ -406,9 +795,11 @@ const nextSlide = () => {
     </div>
 
     <div class="feature">
-      <component
-        :is="ui[uiState].procedures[currentProcedure[uiState]].feature.slides[ui[uiState].procedures[currentProcedure[uiState]].feature.currentSlide]" />
-      <div class="step-buttons">
+      <component v-if="ui[uiState].procedures[currentProcedure[uiState]].feature.slides.length"
+        :is="ui[uiState].procedures[currentProcedure[uiState]].feature.slides[ui[uiState].procedures[currentProcedure[uiState]].feature.currentSlide].slide"
+        v-bind="ui[uiState].procedures[currentProcedure[uiState]].feature.slides[ui[uiState].procedures[currentProcedure[uiState]].feature.currentSlide].props" />
+      <div class="step-buttons"
+        v-if="ui[uiState].procedures[currentProcedure[uiState]].feature.slides.length > 1">
         <NButton class="previous-step" ghost color="white" @click="previousSlide">
           <svg width="16" height="16" viewBox="0 0 32 33" fill="none"
             xmlns="http://www.w3.org/2000/svg">
@@ -548,15 +939,14 @@ const nextSlide = () => {
   .feature {
     display: grid;
     grid-template-rows: 90% 10%;
-    justify-content: center;
     width: 100%;
 
     .slide {
       max-height: 700px;
-      padding: 1rem;
+      padding: .5rem;
       display: flex;
-      align-items: center;
       justify-content: center;
+      width: 100%;
     }
 
     .step-buttons {

@@ -27,8 +27,8 @@ socket.value.on('position', (posX: number, posY: number, rotation: number, user:
 
 <template>
     <div>
-
     </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+</style>
