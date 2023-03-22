@@ -21,6 +21,14 @@ interface namesInterface {
   [name: string]: string;
 }
 
+interface playerPostion {
+  id: string;
+  name: string;
+  posX: number;
+  posY: number;
+  rotation: number;
+}
+
 let names: namesInterface = {};
 
 const nameExist = (name: string) => {
@@ -73,7 +81,14 @@ io.on("connection", (socket: Socket) => {
     const user = (Object.keys(names) as (keyof typeof names)[]).find((key) => {
       return names[key] === socket.id;
     });
-    io.to("spectators").emit("position", posX, posY, rotation, user);
+    const playerPostion: playerPostion = {
+      id: socket.id,
+      name: `${user}`,
+      posX: posX,
+      posY: posY,
+      rotation: rotation,
+    };
+    io.to("spectators").emit("position", playerPostion);
   });
 });
 
