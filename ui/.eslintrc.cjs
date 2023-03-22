@@ -9,7 +9,10 @@ module.exports = {
     '@vue/eslint-config-typescript',
     '@vue/eslint-config-prettier/skip-formatting'
   ],
+  "rules": {
+    "semi": [2, "always"],
+  },
   parserOptions: {
     ecmaVersion: 'latest'
   }
-}
+};
