@@ -1,21 +1,56 @@
+<script lang="ts">
+export enum EmbedMode {
+  PAGE = 1,
+  YT,
+}
+</script>
+
 <script setup lang="ts">
-defineProps({
-  address: String,
-  mode: {
-    type: String,
-    default: 'page',
-  },
+import { computed } from 'vue';
+
+interface Props {
+  mode?: EmbedMode
+  address?: string
+  ytVideoId?: string
+  ytVideoStart?: number
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  mode: () => EmbedMode.PAGE
+});
+
+const ytIframeSrc = computed(() => {
+  if (!props.ytVideoStart) {
+    return `https://www.youtube.com/embed/${props.ytVideoId}`;
+  }
+
+  return `https://www.youtube.com/embed/${props.ytVideoId}?start=${props.ytVideoStart}`;
 })
+
+const ytVideoAddress = computed(() => {
+  if (!props.ytVideoStart) {
+    return `https://www.youtube.com/watch?v=${props.ytVideoId}`;
+  }
+
+  return `https://www.youtube.com/watch?v=${props.ytVideoId}&t=${props.ytVideoStart}`;
+});
 </script>
 
 
 <template>
   <div class="embed-container slide">
-    <iframe :src="address" frameborder="0" v-if="mode === 'page'"></iframe>
-    <iframe v-else-if="mode === 'yt'" :src='address' title="YouTube video player" frameborder="0"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      allowfullscreen></iframe>
-    <a :href="address" target="_blank">{{ address }}</a>
+    <template v-if="mode === EmbedMode.PAGE">
+      <iframe :src="address" frameborder="0" />
+      <a :href="address" target="_blank">{{ address }}</a>
+    </template>
+
+    <template v-else-if="mode === EmbedMode.YT">
+      <iframe :src='ytIframeSrc' title="YouTube video player" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen />
+      <a :href="ytVideoAddress" target="_blank">{{ ytVideoAddress }}</a>
+    </template>
+
   </div>
 </template>
 

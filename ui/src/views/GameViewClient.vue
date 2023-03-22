@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Application, Sprite, ParticleContainer, Rectangle } from 'pixi.js';
+import { Application, Sprite, ParticleContainer, Rectangle, Container } from 'pixi.js';
 import falcon9 from '@/components/sprites/falcon_9_block_5_legs_deployed.png';
 import particle from '@/components/sprites/particle.png';
 import fire from '@/components/sprites/fire.png';
@@ -134,9 +134,10 @@ onMounted(() => {
     app.ticker.add((delta) => {
         falcon9Sprite.x += rocketSpeed.value * delta;
         falcon9Sprite.y += rocketSpeed.value * delta;
-        falcon9Sprite.rotation += (rocketRotationSpeed.value * delta);
+        falcon9Sprite.rotation += ((rocketRotationSpeed.value * delta) / 10);
 
         emitter_left.updateSpawnPos(falcon9Sprite.x - 15, falcon9Sprite.y + 140);
+        emitter_left.rotate(falcon9Sprite.rotation);
         emitter_right.updateSpawnPos(falcon9Sprite.x + 15, falcon9Sprite.y + 140);
     })
 
@@ -148,9 +149,9 @@ onMounted(() => {
 
     app.ticker.add((delta) => {
         if (engineLeftFiring.value) {
-            if (rocketSpeed.value < MAX_ROCKET_SPEED) {
-                rocketSpeed.value += .1;
-            }
+            // if (rocketSpeed.value < MAX_ROCKET_SPEED) {
+            //     rocketSpeed.value -= .05;
+            // }
 
             if (rocketRotationSpeed.value < MAX_ROCKET_ROTATION_SPEED) {
                 rocketRotationSpeed.value += .1;
@@ -158,9 +159,9 @@ onMounted(() => {
         }
 
         if (engineRightFiring.value) {
-            if (rocketSpeed.value < MAX_ROCKET_SPEED) {
-                rocketSpeed.value += .1;
-            }
+            // if (rocketSpeed.value < MAX_ROCKET_SPEED) {
+            //     rocketSpeed.value -= .05;
+            // }
 
             if (rocketRotationSpeed.value > MIN_ROCKET_ROTATION_SPEED) {
                 rocketRotationSpeed.value -= .1;
@@ -168,7 +169,7 @@ onMounted(() => {
         }
 
         if (rocketSpeed.value > MIN_ROCKET_SPEED) {
-            rocketSpeed.value -= .05;
+            // rocketSpeed.value += .01;
         }
     })
 });
@@ -193,7 +194,7 @@ const toggleFullscreen = () => {
 .game-panel {
     border: 1px solid #adb0c2;
     display: grid;
-    grid-template-rows: 92svh 8svh;
+    grid-template-rows: 92svh calc(8svh - 2px);
 
     .controls {
         border-top: 1px solid #adb0c2;

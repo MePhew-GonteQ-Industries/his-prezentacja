@@ -2,7 +2,14 @@
 import { RouterLink } from 'vue-router';
 import { NSwitch } from 'naive-ui';
 import type { CSSProperties } from 'vue';
+import { computed } from 'vue';
+import { useRoute } from "vue-router";
 import { useMainStore } from '@/stores/main';
+import { storeToRefs } from "pinia";
+
+const route = useRoute();
+
+const onHomePage = computed(() => route.name === 'home');
 
 const railStyle = ({
   focused,
@@ -27,12 +34,13 @@ const railStyle = ({
 }
 
 const mainStore = useMainStore();
+const { uiState } = storeToRefs(mainStore);
 
 const updateUiState = (value: boolean) => {
   if (value) {
-    mainStore.uiState = 'bisagex';
+    uiState.value = 'bisagex';
   } else {
-    mainStore.uiState = 'spacex';
+    uiState.value = 'spacex';
   }
 }
 
@@ -119,9 +127,8 @@ const updateUiState = (value: boolean) => {
       </div>
 
       <div class="current-status-container">
-        <!-- <p class="status-value">Trunk jettison and deorbit burn enabled</p> -->
         <n-switch :rail-style="railStyle" size="large" @update-value="updateUiState"
-          class="switch-ui-state">
+          class="switch-ui-state" v-if="onHomePage" :default-value="uiState !== 'spacex'">
           <template #checked>
             BisageX
           </template>
@@ -129,6 +136,7 @@ const updateUiState = (value: boolean) => {
             SpaceX
           </template>
         </n-switch>
+        <p class="status-value" v-else>Trunk jettison and deorbit burn enabled</p>
       </div>
 
       <div class="pointing-mode-container">
@@ -295,8 +303,12 @@ footer {
         text-align: center;
         font-size: .7rem;
         max-width: 200px;
-
       }
+    }
+
+    .current-status-placeholder {
+      margin: 0 .5rem 0 .5rem;
+      padding: .5rem;
     }
 
     .pointing-mode-container {

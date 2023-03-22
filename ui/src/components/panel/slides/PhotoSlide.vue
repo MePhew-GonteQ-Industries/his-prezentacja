@@ -24,8 +24,8 @@ const toggleFullscreen = () => {
 <template>
   <div class="photo-container slide" ref="image">
     <img :src="photo" alt="">
-    <NButton @click="toggleFullscreen" ghost color="#20FBFD" class="fullscreen-toggle">
-      <PhCornersOut :size="32" weight="light" />
+    <NButton @click="toggleFullscreen" ghost color="white" class="fullscreen-toggle">
+      <PhCornersOut :size="30" />
     </NButton>
   </div>
 </template>
@@ -40,6 +40,7 @@ const toggleFullscreen = () => {
     height: auto;
     max-width: 100%;
     max-height: 100%;
+    object-fit: cover;
     border-radius: 1rem;
     border: 1px solid #585D7C;
     position: relative;
@@ -49,6 +50,10 @@ const toggleFullscreen = () => {
     position: absolute;
     right: 5%;
     bottom: 5%;
+    background-color: #111B52;
+    width: 50px;
+    height: 50px;
+    padding: 0;
   }
 }
 </style>

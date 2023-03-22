@@ -12,6 +12,11 @@ import CodeSlide from '@/components/panel/slides/CodeSlide.vue';
 import GlobeSlide from '@/components/panel/slides/GlobeSlide.vue';
 import EmbedSlide from '@/components/panel/slides/EmbedSlide.vue';
 import PhotoSlide from '@/components/panel/slides/PhotoSlide.vue';
+import { EmbedMode } from '@/components/panel/slides/EmbedSlide.vue';
+import { PhCode } from "@phosphor-icons/vue";
+import { PhPlanet } from "@phosphor-icons/vue";
+import { PhCar } from "@phosphor-icons/vue";
+import { PhAirplaneTilt } from "@phosphor-icons/vue";
 import Falcon9 from '@/assets/f9.jpg';
 import dragon from '@/assets/dragon.jpg';
 import starship1 from '@/assets/starship-1.jpg';
@@ -27,6 +32,7 @@ import f1_6 from '@/assets/6.png';
 import plane1 from '@/assets/plane1.png';
 import plane2 from '@/assets/plane2.png';
 import poland737 from '@/assets/737-pl.jpg';
+import crash from '@/assets/crash.png';
 import drgDisplays1 from '@/assets/drg-displays-1.png';
 import drgDisplays2 from '@/assets/drg-displays-2.jpg';
 import drgCrew from '@/assets/drg-crew.jpg';
@@ -68,7 +74,7 @@ const ui = {
   'spacex': {
     procedures: [
       {
-        name: 'Deport & burn',
+        name: 'Deport & Burn',
         steps: {
           interrupt: {
             name: 'Wow, so empty',
@@ -204,6 +210,7 @@ const ui = {
     procedures: [
       {
         name: 'Kodzik',
+        icon: PhCode,
         steps: {
           interrupt: {
             name: 'Projekty',
@@ -291,13 +298,13 @@ const ui = {
             {
               slide: EmbedSlide,
               props: {
-                address: 'https://dripsiaga.pl/timetable/',
+                address: 'https://mephew-witryny-data.netlify.app/',
               }
             },
             {
               slide: EmbedSlide,
               props: {
-                address: 'https://mephew-witryny-data.netlify.app/',
+                address: 'https://dripsiaga.pl/quotes',
               }
             },
             {
@@ -309,13 +316,13 @@ const ui = {
             {
               slide: EmbedSlide,
               props: {
-                address: 'https://zolza-hairstyles.pl/',
+                address: 'https://timetable.dripsiaga.pl/',
               }
             },
             {
               slide: EmbedSlide,
               props: {
-                address: 'https://youtube.com',
+                address: 'https://zolza-hairstyles.pl/',
               }
             },
           ],
@@ -323,6 +330,7 @@ const ui = {
       },
       {
         name: 'Kosmos',
+        icon: PhPlanet,
         steps: {
           interrupt: {
             name: 'Rakiety',
@@ -423,8 +431,9 @@ const ui = {
             {
               slide: EmbedSlide,
               props: {
-                address: 'https://www.youtube.com/live/ODY6JWzS8WU?feature=share&t=697',
-                mode: 'yt',
+                mode: EmbedMode.YT,
+                ytVideoId: 'ODY6JWzS8WU',
+                ytVideoStart: 697,
               }
             },
           ],
@@ -432,6 +441,7 @@ const ui = {
       },
       {
         name: 'F1',
+        icon: PhCar,
         steps: {
           interrupt: {
             name: 'Current Configuration',
@@ -539,29 +549,29 @@ const ui = {
             {
               slide: EmbedSlide,
               props: {
-                address: 'https://youtu.be/er4Ki8I6Drk',
-                mode: 'yt',
+                ytVideoId: 'er4Ki8I6Drk',
+                mode: EmbedMode.YT,
               }
             },
             {
               slide: EmbedSlide,
               props: {
-                address: 'https://youtu.be/gCivN-b4FZI',
-                mode: 'yt',
+                ytVideoId: 'gCivN-b4FZI',
+                mode: EmbedMode.YT,
               }
             },
             {
               slide: EmbedSlide,
               props: {
-                address: 'https://youtu.be/IYndqz5i7mk',
-                mode: 'yt',
+                ytVideoId: 'IYndqz5i7mk',
+                mode: EmbedMode.YT,
               }
             },
             {
               slide: EmbedSlide,
               props: {
-                address: 'https://youtu.be/pIrHA0yttBQ',
-                mode: 'yt',
+                ytVideoId: 'pIrHA0yttBQ',
+                mode: EmbedMode.YT,
               }
             },
           ],
@@ -569,6 +579,7 @@ const ui = {
       },
       {
         name: 'Lotnictwo',
+        icon: PhAirplaneTilt,
         steps: {
           interrupt: {
             name: 'Samoloty',
@@ -668,14 +679,27 @@ const ui = {
             {
               slide: PhotoSlide,
               props: {
+                photo: crash,
+              }
+            },
+            {
+              slide: PhotoSlide,
+              props: {
                 photo: plane1,
               }
             },
             {
               slide: EmbedSlide,
               props: {
-                address: 'https://youtu.be/-Oth4uMD0c4',
-                mode: 'yt',
+                ytVideoId: 'ezLtRjSLpys',
+                mode: EmbedMode.YT,
+              }
+            },
+            {
+              slide: EmbedSlide,
+              props: {
+                ytVideoId: 'peY_a79liFo',
+                mode: EmbedMode.YT,
               }
             },
           ],
@@ -735,8 +759,12 @@ const nextSlide = () => {
     <div class="procedures">
       <template v-for="procedure, index in ui[uiState].procedures" :key="procedure.name">
         <ProcedureComponent :current="index === currentProcedure[uiState]"
-          @click="updateProcedure(index)">{{
-            procedure.name }}
+          @click="updateProcedure(index)">
+          {{ procedure.name }}
+
+          <template #icon v-if="procedure.icon">
+            <component :is="procedure.icon" v-bind="{ size: 26 }" />
+          </template>
         </ProcedureComponent>
       </template>
     </div>
@@ -798,28 +826,43 @@ const nextSlide = () => {
       <component v-if="ui[uiState].procedures[currentProcedure[uiState]].feature.slides.length"
         :is="ui[uiState].procedures[currentProcedure[uiState]].feature.slides[ui[uiState].procedures[currentProcedure[uiState]].feature.currentSlide].slide"
         v-bind="ui[uiState].procedures[currentProcedure[uiState]].feature.slides[ui[uiState].procedures[currentProcedure[uiState]].feature.currentSlide].props" />
-      <div class="step-buttons"
+      <div class="under-slide-section"
         v-if="ui[uiState].procedures[currentProcedure[uiState]].feature.slides.length > 1">
-        <NButton class="previous-step" ghost color="white" @click="previousSlide">
-          <svg width="16" height="16" viewBox="0 0 32 33" fill="none"
-            xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M32 14.2646H7.66L18.84 3.08465L16 0.264648L0 16.2646L16 32.2646L18.82 29.4446L7.66 18.2646H32V14.2646Z"
-              fill="white" />
-          </svg>
-        </NButton>
-        <NButton class="next-step" ghost color="white" @click="nextSlide">
-          <svg width="16" height="16" viewBox="0 0 32 33" fill="none"
-            xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M1.22392e-06 18.2646L24.34 18.2646L13.16 29.4446L16 32.2646L32 16.2646L16 0.264647L13.18 3.08465L24.34 14.2646L1.57361e-06 14.2646L1.22392e-06 18.2646Z"
-              fill="white" />
-          </svg>
-        </NButton>
+
+        <div class="current-slide-container">
+          <p class="current-slide">{{
+            ui[uiState].procedures[currentProcedure[uiState]].feature.currentSlide + 1 }}
+          </p>
+          <span class="separator">&nbsp;/&nbsp;</span>
+          <p class="slides-count">{{
+            ui[uiState].procedures[currentProcedure[uiState]].feature.slides.length }}</p>
+        </div>
+
+        <div class="slide-controls">
+          <NButton class="previous-slide" ghost color="white" @click="previousSlide"
+            v-if="ui[uiState].procedures[currentProcedure[uiState]].feature.currentSlide > 0">
+            <svg width="16" height="16" viewBox="0 0 32 33" fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M32 14.2646H7.66L18.84 3.08465L16 0.264648L0 16.2646L16 32.2646L18.82 29.4446L7.66 18.2646H32V14.2646Z"
+                fill="white" />
+            </svg>
+          </NButton>
+          <NButton class="next-slide" ghost color="white" @click="nextSlide"
+            v-if="ui[uiState].procedures[currentProcedure[uiState]].feature.currentSlide < ui[uiState].procedures[currentProcedure[uiState]].feature.slides.length - 1">
+            <svg width="16" height="16" viewBox="0 0 32 33" fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M1.22392e-06 18.2646L24.34 18.2646L13.16 29.4446L16 32.2646L32 16.2646L16 0.264647L13.18 3.08465L24.34 14.2646L1.57361e-06 14.2646L1.22392e-06 18.2646Z"
+                fill="white" />
+            </svg>
+          </NButton>
+        </div>
       </div>
     </div>
   </div>
 </template>
+
 
 <style lang="scss">
 .n-button.camera-settings-btn {
@@ -830,9 +873,7 @@ const nextSlide = () => {
     font-weight: bold;
   }
 }
-</style>
 
-<style lang="scss">
 .divider.n-divider--dashed .n-divider__line {
   border-color: white;
 }
@@ -849,19 +890,6 @@ const nextSlide = () => {
 </style>
 
 <style scoped lang="scss">
-.step-buttons {
-  display: flex;
-  gap: .5rem;
-
-  .previous-step,
-  .next-step {
-    width: 50px;
-    height: 50px;
-    border-radius: .375rem;
-    background-color: #111B52;
-  }
-}
-
 .home-page {
   display: grid;
   grid-template-rows: 10vh auto;
@@ -869,90 +897,139 @@ const nextSlide = () => {
   justify-items: center;
   height: 95%;
 
-  header {
-    width: 100%;
-    grid-column: 1/-1;
-  }
-
-  .procedures {
-    border-right: 1px solid #adb0c2;
-    width: 100%;
+  .slide-controls,
+  .step-buttons {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    padding: .5rem 0;
+    justify-content: center;
+    gap: .5rem;
+
+    .previous-slide,
+    .previous-step,
+    .next-slide,
+    .next-step {
+      width: 50px;
+      height: 50px;
+      border-radius: .375rem;
+      background-color: #111B52;
+    }
+  }
+}
+
+header {
+  width: 100%;
+  grid-column: 1/-1;
+}
+
+.procedures {
+  border-right: 1px solid #adb0c2;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: .5rem 0;
+}
+
+.current-procedure {
+  border-right: 1px solid #adb0c2;
+  width: 100%;
+  display: grid;
+  grid-template-rows: 12vh 69vh;
+
+  @media (min-height: 900px) {
+    grid-template-rows: 13vh 71vh;
   }
 
-  .current-procedure {
-    border-right: 1px solid #adb0c2;
-    width: 100%;
-    display: grid;
-    grid-template-rows: 12vh 69vh;
+  .procedure-header {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
 
-    @media (min-height: 900px) {
-      grid-template-rows: 13vh 71vh;
-    }
+    .procedure-name {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin: 0 10% 0 5%;
 
-    .procedure-header {
-      display: flex;
-      align-items: center;
-      padding: 1rem;
-
-      .procedure-name {
-        font-size: 1.2rem;
-        font-weight: bold;
-        margin: 0 10% 0 5%;
-
-        @media (min-width: 1920px) {
-          font-size: 1.4rem;
-        }
-      }
-
-      .procedure-state-container {
-        display: flex;
-        flex-direction: column;
-
-        .title-container {
-          display: flex;
-          gap: .5rem;
-
-          .procedure-state {
-            text-transform: uppercase;
-            font-weight: bold;
-          }
-
-          svg {
-            cursor: pointer;
-          }
-        }
+      @media (min-width: 1920px) {
+        font-size: 1.4rem;
       }
     }
 
-    .procedure-steps {
+    .procedure-state-container {
       display: flex;
       flex-direction: column;
-      gap: 1rem;
-      padding: 1rem 0 1rem 1rem;
+
+      .title-container {
+        display: flex;
+        gap: .5rem;
+
+        .procedure-state {
+          text-transform: uppercase;
+          font-weight: bold;
+        }
+
+        svg {
+          cursor: pointer;
+        }
+      }
     }
   }
 
-  .feature {
-    display: grid;
-    grid-template-rows: 90% 10%;
+  .procedure-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem 0 1rem 1rem;
+  }
+}
+
+.feature {
+  display: grid;
+  grid-template-rows: 90% 10%;
+  width: 100%;
+
+  .slide {
+    max-height: 700px;
+    padding: .5rem;
+    display: flex;
+    justify-content: center;
     width: 100%;
+  }
 
-    .slide {
-      max-height: 700px;
-      padding: .5rem;
-      display: flex;
-      justify-content: center;
-      width: 100%;
-    }
+  .under-slide-section {
+    display: grid;
+    grid-template-columns: 45% 55%;
 
-    .step-buttons {
+    .current-slide-container {
       display: flex;
       align-items: center;
       justify-content: center;
+
+      p,
+      span {
+        font-weight: bold;
+        font-size: 1.2rem;
+      }
+
+      .current-slide {
+        border-radius: .375rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+
+    .slide-controls {
+      display: grid;
+      grid-template-columns: 50px 50px 1fr;
+
+      .previous-slide {
+        grid-column: 1;
+      }
+
+      .next-slide {
+        grid-column: 2;
+      }
     }
   }
 }
