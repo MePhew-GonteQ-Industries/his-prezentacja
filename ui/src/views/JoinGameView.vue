@@ -36,7 +36,11 @@ socket.value.on('nameNotRegistered', (message: string) => {
 });
 
 const saveName = () => {
-    socket.value.emit('saveName', name.value);
+    if (!name.value) {
+        messageBox.error("Musisz podać imię");
+    } else {
+        socket.value.emit('saveName', name.value);
+    }
 };
 </script>
 
