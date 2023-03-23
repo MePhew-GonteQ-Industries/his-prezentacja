@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "pixi-actions": "^1.0.7",
+    "tweedle.js": "^2.0.1"
+  }
+}
