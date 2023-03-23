@@ -1173,6 +1173,10 @@ header {
     display: flex;
     justify-content: center;
     width: 100%;
+
+    @media (max-height: 1000px) {
+      max-height: 650px;
+    }
   }
 
   .under-slide-section {

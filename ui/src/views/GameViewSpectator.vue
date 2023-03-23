@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useMainStore } from '@/stores/main';
 import { io } from 'socket.io-client';
 import { storeToRefs } from 'pinia';
@@ -302,6 +302,10 @@ const qrcodeGame = useQRCode('https://www.prezentacja.dripsiaga.pl/join-game');
     h1 {
       font-weight: bold;
       text-decoration: underline;
+    }
+
+    img {
+      height: 100%;
     }
 
     .n-button {
