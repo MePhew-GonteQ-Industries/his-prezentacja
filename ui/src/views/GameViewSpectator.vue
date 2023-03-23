@@ -23,7 +23,7 @@ class Rocket extends Sprite {
   id: string;
   name: string;
 
-  private _container: Container;
+  container: Container;
 
   nicknameText: Text;
 
@@ -44,10 +44,10 @@ class Rocket extends Sprite {
     this.name = name;
     this.anchor.set(0.5);
     this.rotation = rotation;
-    this._container = container;
+    this.container = container;
 
-    this._container.x = x;
-    this._container.y = y;
+    this.container.x = x;
+    this.container.y = y;
 
     const styly: TextStyle = new TextStyle({
       align: 'center',
@@ -55,12 +55,12 @@ class Rocket extends Sprite {
       fontSize: 20,
     });
     this.nicknameText = new Text(this.name, styly);
-    this._container.addChild(this.nicknameText);
+    this.container.addChild(this.nicknameText);
 
-    this._container.addChild(this);
+    this.container.addChild(this);
 
     this._leftEmitter = new Emitter(
-      this._container,
+      this.container,
       upgradeConfig(particleSettings, [fire, particle]),
     );
     this._leftEmitter.autoUpdate = true;
@@ -68,7 +68,7 @@ class Rocket extends Sprite {
     this._leftEmitter.updateSpawnPos(-15, 150);
 
     this._rightEmitter = new Emitter(
-      this._container,
+      this.container,
       upgradeConfig(particleSettings, [fire, particle]),
     );
     this._rightEmitter.autoUpdate = true;
@@ -77,8 +77,8 @@ class Rocket extends Sprite {
   }
 
   updatePos = (x: number, y: number, rotation: number) => {
-    if (this._container.y > y) {
-      if (this._container.x < x) {
+    if (this.container.y > y) {
+      if (this.container.x < x) {
         this._leftEmitter.emit = true;
 
         setTimeout(() => {
@@ -100,8 +100,8 @@ class Rocket extends Sprite {
     this._leftEmitter.rotate(rotation);
     this._rightEmitter.rotate(rotation);
 
-    this._container.x = x;
-    this._container.y = y;
+    this.container.x = x;
+    this.container.y = y;
     this.rotation = rotation;
   };
 }
@@ -234,7 +234,7 @@ class RocketGameSpectator {
   };
 
   private _removeRocket(id: string) {
-    this._rockets[id]?.destroy();
+    this._rockets[id]?.container.destroy();
     this._rockets[id] = null;
   }
 
