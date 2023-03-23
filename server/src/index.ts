@@ -23,7 +23,7 @@ interface namesInterface {
 
 interface playerPostion {
   id: string;
-  name: string;
+  name: string | undefined | number;
   posX: number;
   posY: number;
   rotation: number;
@@ -80,7 +80,7 @@ io.on("connection", (socket: Socket) => {
     });
     const playerPostion: playerPostion = {
       id: socket.id,
-      name: `${user}`,
+      name: user,
       posX: posX,
       posY: posY,
       rotation: rotation,
