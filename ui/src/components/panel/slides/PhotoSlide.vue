@@ -5,7 +5,7 @@ import { ref } from 'vue';
 
 defineProps({
   photo: String,
-})
+});
 
 const image = ref<null | HTMLElement>(null);
 
@@ -20,10 +20,9 @@ const toggleFullscreen = () => {
 };
 </script>
 
-
 <template>
   <div class="photo-container slide" ref="image">
-    <img :src="photo" alt="">
+    <img :src="photo" alt="" />
     <NButton @click="toggleFullscreen" ghost color="white" class="fullscreen-toggle">
       <PhCornersOut :size="30" />
     </NButton>
@@ -40,9 +39,9 @@ const toggleFullscreen = () => {
     height: auto;
     max-width: 100%;
     max-height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     border-radius: 1rem;
-    border: 1px solid #585D7C;
+    border: 1px solid #585d7c;
     position: relative;
   }
 
@@ -50,7 +49,7 @@ const toggleFullscreen = () => {
     position: absolute;
     right: 5%;
     bottom: 5%;
-    background-color: #111B52;
+    background-color: #111b52;
     width: 50px;
     height: 50px;
     padding: 0;

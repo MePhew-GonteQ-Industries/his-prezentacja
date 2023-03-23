@@ -5,15 +5,7 @@ import { io } from 'socket.io-client';
 import { storeToRefs } from 'pinia';
 import { useMessage, NButton } from 'naive-ui';
 import { PhCornersOut } from '@phosphor-icons/vue';
-import {
-  Application,
-  Sprite,
-  ParticleContainer,
-  Texture,
-  TextStyle,
-  Container,
-  Text,
-} from 'pixi.js';
+import { Application, Sprite, Texture, TextStyle, Container, Text } from 'pixi.js';
 import falcon9 from '@/components/sprites/falcon_9_block_5_legs_deployed.png';
 import particle from '@/components/sprites/particle.png';
 import fire from '@/components/sprites/fire.png';
@@ -190,6 +182,12 @@ class RocketGameSpectator {
     this._socket.value.on('position', (playerPosition: PlayerPosition) => {
       const rocket = this._rockets[playerPosition.id];
 
+      if (playerPosition.name === '' || playerPosition.name === undefined) {
+        if (rocket) this._removeRocket(playerPosition.id);
+
+        return null;
+      }
+
       if (!rocket) {
         this._addRocket(
           playerPosition.id,
@@ -240,50 +238,11 @@ class RocketGameSpectator {
     this._rockets[id] = null;
   }
 
-  private _createParitcleEmitters = () => {
-    const particleContainer = new ParticleContainer();
-    this._app.stage.addChild(particleContainer);
-
-    this._leftEmitter = new Emitter(
-      particleContainer,
-      upgradeConfig(particleSettings, [fire, particle]),
-    );
-    this._leftEmitter.autoUpdate = true;
-    this._leftEmitter.updateSpawnPos(
-      this._app.screen.width / 2 - 10,
-      this._app.screen.height / 2 + 120,
-    );
-    this._leftEmitter.emit = false;
-
-    this._rightEmitter = new Emitter(
-      particleContainer,
-      upgradeConfig(particleSettings, [fire, particle]),
-    );
-    this._rightEmitter.autoUpdate = true;
-    this._rightEmitter.updateSpawnPos(
-      this._app.screen.width / 2 + 10,
-      this._app.screen.height / 2 + 120,
-    );
-    this._rightEmitter.emit = false;
-  };
-
   private _resizeHandler = () => {
     const width = document.body.offsetWidth;
     const height = this._pixieCanvas.parentElement?.clientHeight ?? 0;
 
     this._app.renderer.resize(width, height);
-
-    // this._rocket.x = this._app.screen.width / 2;
-    // this._rocket.y = this._app.screen.height / 2;
-
-    // this._leftEmitter.updateSpawnPos(
-    //   this._app.screen.width / 2 - 10,
-    //   this._app.screen.height / 2 + 120,
-    // );
-    // this._rightEmitter.updateSpawnPos(
-    //   this._app.screen.width / 2 + 10,
-    //   this._app.screen.height / 2 + 120,
-    // );
   };
 
   private _registerResizeHandler = () => {
@@ -303,15 +262,18 @@ onMounted(() => {
   rocketGameClient.initialize();
 });
 
-const qrcode = useQRCode('https://www.prezentacja.dripsiaga.pl/join-game');
+const qrcodeRickroll = useQRCode('https://youtu.be/dQw4w9WgXcQ');
+const qrcodeGame = useQRCode('https://www.prezentacja.dripsiaga.pl/join-game');
 </script>
 
 <template>
   <div class="game-panel">
     <div id="pixi-content"><canvas id="pixi-canvas" /></div>
     <div class="controls">
-      <img :src="qrcode" alt="QR Code" />
-      <NButton ghost color="white">
+      <img :src="qrcodeRickroll" alt="QR Code" />
+      <h1>https://www.prezentacja.dripsiaga.pl/join-game</h1>
+      <img :src="qrcodeGame" alt="QR Code" />
+      <NButton ghost color="white" @click="rocketGameClient.toggleFullscreen">
         <PhCornersOut :size="30" weight="light" />
       </NButton>
     </div>
@@ -322,7 +284,8 @@ const qrcode = useQRCode('https://www.prezentacja.dripsiaga.pl/join-game');
 .game-panel {
   display: grid;
   height: 100%;
-  grid-template-rows: 85% calc(15% - 1px);
+  grid-template-rows: 78% calc(22% - 1px);
+  justify-items: center;
 
   #pixi-content {
     border-bottom: 1px solid white;
@@ -334,6 +297,12 @@ const qrcode = useQRCode('https://www.prezentacja.dripsiaga.pl/join-game');
     align-items: center;
     justify-content: flex-end;
     margin: 0 2rem;
+    gap: 5rem;
+
+    h1 {
+      font-weight: bold;
+      text-decoration: underline;
+    }
 
     .n-button {
       padding: 0;

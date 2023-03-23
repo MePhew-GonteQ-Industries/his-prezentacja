@@ -6,16 +6,7 @@ export enum Engine {
 </script>
 
 <script setup lang="ts">
-import {
-  Application,
-  Sprite,
-  ParticleContainer,
-  Rectangle,
-  Texture,
-  Text,
-  Container,
-  TextStyle,
-} from 'pixi.js';
+import { Application, Sprite, Rectangle, Texture, Container } from 'pixi.js';
 import falcon9 from '@/components/sprites/falcon_9_block_5_legs_deployed.png';
 import particle from '@/components/sprites/particle.png';
 import fire from '@/components/sprites/fire.png';

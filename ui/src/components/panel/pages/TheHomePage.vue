@@ -34,6 +34,20 @@ import plane2 from '@/assets/plane2.png';
 import poland737 from '@/assets/737-pl.jpg';
 import crash from '@/assets/crash.png';
 import drgDisplays1 from '@/assets/drg-displays-1.png';
+import prepared from '@/assets/prepared.png';
+import xplane11 from '@/assets/x-plane-11.jpg';
+import xplane12 from '@/assets/x-plane-12.jpg';
+import msfs from '@/assets/msfs.png';
+import dcs from '@/assets/dcs.jpg';
+import ytPilots from '@/assets/yt-pilots.png';
+import f22 from '@/assets/f-22.jpg';
+import f35 from '@/assets/f-35A.jpg';
+import ytF1 from '@/assets/yt-f1.png';
+import terran1Tweet from '@/assets/terran1-tweet.png';
+import terran11 from '@/assets/terran1-1.jpg';
+import terran12 from '@/assets/terran1-2.jpg';
+import terran13 from '@/assets/terran1-3.jpg';
+import ytRockets from '@/assets/yt-rockets.png';
 
 const counterProcedureTime = ref(0);
 
@@ -379,6 +393,12 @@ const ui = {
               },
             },
             {
+              slide: EmbedSlide,
+              props: {
+                address: 'https://apolloinrealtime.org/',
+              },
+            },
+            {
               slide: PhotoSlide,
               props: {
                 photo: dragon,
@@ -420,6 +440,44 @@ const ui = {
                 mode: EmbedMode.YT,
                 ytVideoId: 'ODY6JWzS8WU',
                 ytVideoStart: 697,
+              },
+            },
+            {
+              slide: PhotoSlide,
+              props: {
+                photo: terran1Tweet,
+              },
+            },
+            {
+              slide: PhotoSlide,
+              props: {
+                photo: terran11,
+              },
+            },
+            {
+              slide: PhotoSlide,
+              props: {
+                photo: terran12,
+              },
+            },
+            {
+              slide: PhotoSlide,
+              props: {
+                photo: terran13,
+              },
+            },
+            {
+              slide: EmbedSlide,
+              props: {
+                mode: EmbedMode.YT,
+                ytVideoId: '_RDiAdeFPcE',
+                ytVideoStart: 4803,
+              },
+            },
+            {
+              slide: PhotoSlide,
+              props: {
+                photo: ytRockets,
               },
             },
           ],
@@ -560,6 +618,12 @@ const ui = {
                 mode: EmbedMode.YT,
               },
             },
+            {
+              slide: PhotoSlide,
+              props: {
+                photo: ytF1,
+              },
+            },
           ],
         },
       },
@@ -653,6 +717,63 @@ const ui = {
             {
               slide: PhotoSlide,
               props: {
+                photo: prepared,
+              },
+            },
+            {
+              slide: PhotoSlide,
+              props: {
+                photo: xplane11,
+              },
+            },
+            {
+              slide: PhotoSlide,
+              props: {
+                photo: xplane12,
+              },
+            },
+            {
+              slide: PhotoSlide,
+              props: {
+                photo: msfs,
+              },
+            },
+            {
+              slide: EmbedSlide,
+              props: {
+                ytVideoId: 'LXAB44dcQlc',
+                mode: EmbedMode.YT,
+              },
+            },
+            {
+              slide: PhotoSlide,
+              props: {
+                photo: dcs,
+              },
+            },
+            {
+              slide: PhotoSlide,
+              props: {
+                photo: f22,
+              },
+            },
+            {
+              slide: PhotoSlide,
+              props: {
+                photo: f35,
+              },
+            },
+            {
+              slide: EmbedSlide,
+              props: {
+                ytVideoId: '8USngHhFqE0',
+                mode: EmbedMode.YT,
+                ytVideoStart: 276,
+              },
+            },
+            {
+              slide: PhotoSlide,
+              props: {
                 photo: plane2,
               },
             },
@@ -686,6 +807,12 @@ const ui = {
               props: {
                 ytVideoId: 'peY_a79liFo',
                 mode: EmbedMode.YT,
+              },
+            },
+            {
+              slide: PhotoSlide,
+              props: {
+                photo: ytPilots,
               },
             },
           ],
