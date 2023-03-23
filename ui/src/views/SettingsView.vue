@@ -4,12 +4,13 @@ import { RouterLink } from 'vue-router';
 
 <template>
   <div class="settings-page">
-    <h1>video settings</h1>
-    <section>kwakwa</section>
+    <section class="settings-subpages-container">
+      <router-view />
+    </section>
     <nav>
       <svg
-        width="575.11591"
-        height="120.142"
+        width="570"
+        height="80"
         viewBox="0 0 575.11591 120.142"
         fill="none"
         version="1.1"
@@ -23,31 +24,8 @@ import { RouterLink } from 'vue-router';
         xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
         xmlns="http://www.w3.org/2000/svg"
         xmlns:svg="http://www.w3.org/2000/svg"
+        class="container"
       >
-        <defs id="defs8" />
-        <sodipodi:namedview
-          id="namedview6"
-          pagecolor="#505050"
-          bordercolor="#eeeeee"
-          borderopacity="1"
-          inkscape:pageshadow="0"
-          inkscape:pageopacity="0"
-          inkscape:pagecheckerboard="0"
-          showgrid="false"
-          fit-margin-top="0"
-          fit-margin-left="0"
-          fit-margin-right="0"
-          fit-margin-bottom="0"
-          inkscape:zoom="1.3678859"
-          inkscape:cx="272.48603"
-          inkscape:cy="81.445435"
-          inkscape:window-width="1920"
-          inkscape:window-height="1009"
-          inkscape:window-x="1272"
-          inkscape:window-y="-8"
-          inkscape:window-maximized="1"
-          inkscape:current-layer="svg4"
-        />
         <path
           style="
             fill: #020738;
@@ -64,7 +42,7 @@ import { RouterLink } from 'vue-router';
           style="
             fill: none;
             stroke: #ffffff;
-            stroke-width: 2px;
+            stroke-width: 3px;
             stroke-linecap: butt;
             stroke-linejoin: miter;
             stroke-opacity: 1;
@@ -76,7 +54,7 @@ import { RouterLink } from 'vue-router';
           style="
             fill: none;
             stroke: #ffffff;
-            stroke-width: 2px;
+            stroke-width: 3px;
             stroke-linecap: butt;
             stroke-linejoin: miter;
             stroke-opacity: 1;
@@ -88,7 +66,7 @@ import { RouterLink } from 'vue-router';
           style="
             fill: none;
             stroke: #ffffff;
-            stroke-width: 2px;
+            stroke-width: 3px;
             stroke-linecap: butt;
             stroke-linejoin: miter;
             stroke-opacity: 1;
@@ -99,7 +77,7 @@ import { RouterLink } from 'vue-router';
       </svg>
       <ul>
         <li>
-          <router-link to="s">
+          <router-link :to="{ name: 'audioSettings' }">
             <svg
               width="25"
               height="25"
@@ -123,7 +101,9 @@ import { RouterLink } from 'vue-router';
 
             <span>Audio</span>
           </router-link>
-          <router-link to="s">
+        </li>
+        <li>
+          <router-link :to="{ name: 'cabinLightingSettings' }">
             <svg
               width="25"
               height="25"
@@ -147,7 +127,10 @@ import { RouterLink } from 'vue-router';
             </svg>
             <span>Cabin</span>
           </router-link>
-          <router-link to="s">
+        </li>
+
+        <li>
+          <router-link :to="{ name: 'videoSettings' }">
             <svg
               width="25"
               height="25"
@@ -169,6 +152,20 @@ import { RouterLink } from 'vue-router';
   </div>
 </template>
 
+<style lang="scss">
+.settings-subpage {
+  display: grid;
+  grid-template-rows: 1fr auto;
+
+  h1 {
+    text-transform: uppercase;
+    font-weight: bold;
+    text-align: center;
+    padding: 2rem;
+  }
+}
+</style>
+
 <style scoped lang="scss">
 .settings-page {
   box-sizing: border-box;
@@ -179,28 +176,21 @@ import { RouterLink } from 'vue-router';
   display: flex;
   justify-content: center;
   display: grid;
-  grid-template-rows: 1fr 5fr 1fr;
+  grid-template-rows: 5fr 1fr;
 
   background: rgb(255, 255, 255);
   background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0.2%, rgba(2, 7, 56, 1) 100%);
 
   position: relative;
-
-  h1 {
-    text-transform: uppercase;
-    font-weight: bold;
-    text-align: center;
-    padding: 2rem 0;
-  }
+  justify-items: center;
 
   nav {
     display: flex;
     align-items: flex-end;
 
-    svg {
+    .container {
       position: relative;
       bottom: -3px;
-      height: 80px;
     }
 
     ul {
@@ -216,11 +206,24 @@ import { RouterLink } from 'vue-router';
       display: flex;
       align-items: center;
       justify-content: center;
+      gap: 2rem;
 
       li {
         a {
           display: inline-flex;
+          flex-direction: column;
           justify-content: center;
+          align-items: center;
+          text-decoration: none;
+          border-bottom: 4px solid transparent;
+
+          &.router-link-exact-active {
+            border-color: white;
+          }
+
+          span {
+            color: white;
+          }
         }
       }
     }

@@ -17,6 +17,24 @@ const router = createRouter({
           path: 'settings',
           name: 'settings',
           component: () => import('@/views/SettingsView.vue'),
+          redirect: { name: 'videoSettings' },
+          children: [
+            {
+              path: 'audio',
+              name: 'audioSettings',
+              component: () => import('@/components/panel/settings/AudioSettings.vue'),
+            },
+            {
+              path: 'cabin-lighting',
+              name: 'cabinLightingSettings',
+              component: () => import('@/components/panel/settings/CabinLightingSettings.vue'),
+            },
+            {
+              path: 'video',
+              name: 'videoSettings',
+              component: () => import('@/components/panel/settings/VideoSettings.vue'),
+            },
+          ],
         },
         {
           path: 'game-spectator',
