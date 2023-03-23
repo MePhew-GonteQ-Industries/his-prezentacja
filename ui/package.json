@@ -14,9 +14,11 @@
   "dependencies": {
     "@phosphor-icons/vue": "^2.0.1",
     "@pixi/particle-emitter": "^5.0.8",
+    "@vueuse/integrations": "^9.13.0",
     "highlight.js": "^11.7.0",
     "pinia": "^2.0.32",
     "pixi.js": "^7.2.0",
+    "qrcode": "^1.5.1",
     "sass": "^1.59.3",
     "socket.io-client": "^4.6.1",
     "vue": "^3.2.47",

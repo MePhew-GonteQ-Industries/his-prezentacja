@@ -14,12 +14,12 @@ import {
   Container,
   Text,
 } from 'pixi.js';
-import { Engine } from '@/views/GameViewClient.vue';
 import falcon9 from '@/components/sprites/falcon_9_block_5_legs_deployed.png';
 import particle from '@/components/sprites/particle.png';
 import fire from '@/components/sprites/fire.png';
 import * as particleSettings from '@/emitter.json';
 import { Emitter, upgradeConfig } from '@pixi/particle-emitter';
+import { useQRCode } from '@vueuse/integrations/useQRCode';
 
 const mainStore = useMainStore();
 
@@ -302,12 +302,15 @@ const rocketGameClient = new RocketGameSpectator(socket);
 onMounted(() => {
   rocketGameClient.initialize();
 });
+
+const qrcode = useQRCode('https://www.prezentacja.dripsiaga.pl/join-game');
 </script>
 
 <template>
   <div class="game-panel">
     <div id="pixi-content"><canvas id="pixi-canvas" /></div>
     <div class="controls">
+      <img :src="qrcode" alt="QR Code" />
       <NButton ghost color="white">
         <PhCornersOut :size="30" weight="light" />
       </NButton>
@@ -319,7 +322,7 @@ onMounted(() => {
 .game-panel {
   display: grid;
   height: 100%;
-  grid-template-rows: 95% calc(5% - 1px);
+  grid-template-rows: 85% calc(15% - 1px);
 
   #pixi-content {
     border-bottom: 1px solid white;
