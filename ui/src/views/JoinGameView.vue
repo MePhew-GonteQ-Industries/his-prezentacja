@@ -12,11 +12,8 @@ const mainStore = useMainStore();
 
 const { socket } = storeToRefs(mainStore);
 
-console.log(socket);
-
 if (!socket.value) {
     socket.value = io('http://localhost:4000');
-    console.log(socket.value);
 }
 
 const name = ref();

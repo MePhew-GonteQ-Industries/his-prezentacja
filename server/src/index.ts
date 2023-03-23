@@ -68,16 +68,17 @@ io.on("connection", (socket: Socket) => {
     console.log(`Client's socket id: ${socket.id}, name: ${name}`);
     if (nameExist(name)) {
       console.log(names);
+      names[name] = socket.id;
       io.to(names[name]).emit("nameNotRegistered", "Imię jest już zajęte!");
     } else {
       names[name] = socket.id;
       io.to(names[name]).emit("nameRegistered", "Zapraszamy do gry!");
+      io.to("spectators").emit("playerConnected", name, socket.id);
       console.log(names);
     }
   });
 
   socket.on("position", (posX: number, posY: number, rotation: number) => {
-    console.log(`PosX: ${posX}, PosY: ${posY}, Rotation: ${rotation}`);
     const user = (Object.keys(names) as (keyof typeof names)[]).find((key) => {
       return names[key] === socket.id;
     });
@@ -89,6 +90,18 @@ io.on("connection", (socket: Socket) => {
       rotation: rotation,
     };
     io.to("spectators").emit("position", playerPostion);
+  });
+
+  socket.on("playerDisconnected", () => {
+    const name = (Object.keys(names) as (keyof typeof names)[]).find((key) => {
+      return names[key] === socket.id;
+    });
+    io.to("spectators").emit("playerDisconnected", name, socket.id);
+    for (const [key] of Object.entries(names)) {
+      if (names[key] === socket.id) {
+        delete names[key];
+      }
+    }
   });
 });
 
