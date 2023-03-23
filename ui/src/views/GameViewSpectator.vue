@@ -153,7 +153,7 @@ class RocketGameSpectator {
 
   private _initSocket() {
     if (!this._socket.value) {
-      this._socket.value = io('http://localhost:4000');
+      this._socket.value = io(import.meta.env.VITE_API_URL);
     }
     this._joinSpectatorsRoom();
 
