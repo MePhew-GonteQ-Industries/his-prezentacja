@@ -55,6 +55,10 @@ io.on("connection", (socket: Socket) => {
         delete names[key];
       }
     }
+    const name = (Object.keys(names) as (keyof typeof names)[]).find((key) => {
+      return names[key] === socket.id;
+    });
+    io.to("spectators").emit("playerDisconnected", name, socket.id);
     console.log(names);
     console.log(`User with id: ${socket.id} disconnected`);
   });
