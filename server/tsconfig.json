@@ -14,8 +14,12 @@
         "lib": ["dom", "es6", "ESNext", "DOM.Iterable"],
         "baseUrl": "./src",
         "outDir": "./dist",
-        "resolveJsonModule": true
+        "resolveJsonModule": true,
+        "sourceMap": true
     },
+    "include": [
+        "src/**/*"
+    ],
     "exclude": [
         "node_modules"
     ]
