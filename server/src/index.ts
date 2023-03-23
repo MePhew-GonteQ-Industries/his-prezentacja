@@ -36,8 +36,6 @@ const nameExist = (name: string) => {
 };
 
 io.on("connection", (socket: Socket) => {
-  console.log(`User with id: ${socket.id} connected`);
-
   socket.on("joinRoom", (room: string) => {
     socket.join(room);
     console.log(`User with ${socket.id} joined room ${room}`);
@@ -59,26 +57,20 @@ io.on("connection", (socket: Socket) => {
       return names[key] === socket.id;
     });
     io.to("spectators").emit("playerDisconnected", name, socket.id);
-    console.log(names);
-    console.log(`User with id: ${socket.id} disconnected`);
   });
 
   socket.on("message", (message: string) => {
-    console.log(message);
     socket.broadcast.emit("message", message);
   });
 
   socket.on("saveName", (name: string) => {
-    console.log(`Client's socket id: ${socket.id}, name: ${name}`);
     if (nameExist(name)) {
-      console.log(names);
       names[name] = socket.id;
       io.to(names[name]).emit("nameNotRegistered", "Imię jest już zajęte!");
     } else {
       names[name] = socket.id;
       io.to(names[name]).emit("nameRegistered", "Zapraszamy do gry!");
       io.to("spectators").emit("playerConnected", name, socket.id);
-      console.log(names);
     }
   });
 
@@ -93,7 +85,9 @@ io.on("connection", (socket: Socket) => {
       posY: posY,
       rotation: rotation,
     };
-    io.to("spectators").emit("position", playerPostion);
+    if (user !== undefined) {
+      io.to("spectators").emit("position", playerPostion);
+    }
   });
 
   socket.on("playerDisconnected", () => {
