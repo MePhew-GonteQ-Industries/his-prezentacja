@@ -13,7 +13,7 @@ const mainStore = useMainStore();
 const { socket } = storeToRefs(mainStore);
 
 if (!socket.value) {
-  socket.value = io('https://api.prezentacja.dripsiaga.pl');
+  socket.value = io(import.meta.env.VITE_API_URL);
 }
 
 const name = ref();
