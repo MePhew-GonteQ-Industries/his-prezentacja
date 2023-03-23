@@ -5,8 +5,15 @@ import { io } from 'socket.io-client';
 import { storeToRefs } from 'pinia';
 import { useMessage, NButton } from 'naive-ui';
 import { PhCornersOut } from '@phosphor-icons/vue';
-import { Application, Sprite, ParticleContainer, Texture } from 'pixi.js';
-import { Actions, Interpolations } from 'pixi-actions';
+import {
+  Application,
+  Sprite,
+  ParticleContainer,
+  Texture,
+  TextStyle,
+  Container,
+  Text,
+} from 'pixi.js';
 import { Engine } from '@/views/GameViewClient.vue';
 import falcon9 from '@/components/sprites/falcon_9_block_5_legs_deployed.png';
 import particle from '@/components/sprites/particle.png';
@@ -23,9 +30,13 @@ const messageBox = useMessage();
 class Rocket extends Sprite {
   id: string;
   name: string;
-  speedX: number;
-  speedY: number;
-  rotationSpeed: number;
+
+  private _container: Container;
+
+  nicknameText: Text;
+
+  _leftEmitter: Emitter;
+  _rightEmitter: Emitter;
 
   constructor(
     id: string,
@@ -33,22 +44,74 @@ class Rocket extends Sprite {
     x: number,
     y: number,
     rotation: number,
+    container: Container,
     texture: Texture = Texture.from(falcon9),
-    speedX: number = 0,
-    speedY: number = 0,
-    rotationSpeed: number = 0,
   ) {
     super(texture);
     this.id = id;
     this.name = name;
     this.anchor.set(0.5);
-    this.x = x;
-    this.y = y;
     this.rotation = rotation;
-    this.speedX = speedX;
-    this.speedY = speedY;
-    this.rotationSpeed = rotationSpeed;
+    this._container = container;
+
+    this._container.x = x;
+    this._container.y = y;
+
+    const styly: TextStyle = new TextStyle({
+      align: 'center',
+      fill: '#ffffff',
+      fontSize: 20,
+    });
+    this.nicknameText = new Text(this.name, styly);
+    this._container.addChild(this.nicknameText);
+
+    this._container.addChild(this);
+
+    this._leftEmitter = new Emitter(
+      this._container,
+      upgradeConfig(particleSettings, [fire, particle]),
+    );
+    this._leftEmitter.autoUpdate = true;
+    this._leftEmitter.emit = true;
+    this._leftEmitter.updateSpawnPos(-15, 150);
+
+    this._rightEmitter = new Emitter(
+      this._container,
+      upgradeConfig(particleSettings, [fire, particle]),
+    );
+    this._rightEmitter.autoUpdate = true;
+    this._rightEmitter.emit = true;
+    this._rightEmitter.updateSpawnPos(15, 150);
   }
+
+  updatePos = (x: number, y: number, rotation: number) => {
+    if (this._container.y > y) {
+      if (this._container.x < x) {
+        this._leftEmitter.emit = true;
+
+        setTimeout(() => {
+          this._leftEmitter.emit = false;
+        }, 200);
+      } else {
+        this._rightEmitter.emit = true;
+
+        setTimeout(() => {
+          this._rightEmitter.emit = false;
+        }, 200);
+      }
+    }
+
+    this.rotation = rotation;
+
+    this.nicknameText.y = -150;
+
+    this._leftEmitter.rotate(rotation);
+    this._rightEmitter.rotate(rotation);
+
+    this._container.x = x;
+    this._container.y = y;
+    this.rotation = rotation;
+  };
 }
 
 interface PlayerPosition {
@@ -64,8 +127,7 @@ class RocketGameSpectator {
 
   private _app!: Application;
 
-  private _rockets: { [key: string]: Rocket } = {};
-  private _players: { [key: string]: string } = {};
+  private _rockets: { [key: string]: null | Rocket } = {};
   private _socket;
   private _pixieCanvas!: HTMLCanvasElement;
 
@@ -85,9 +147,6 @@ class RocketGameSpectator {
     this._registerResizeHandler();
 
     this._initSocket();
-
-    // this._createRocket();
-    // this._createParitcleEmitters();
 
     this._resizeHandler();
   };
@@ -118,13 +177,8 @@ class RocketGameSpectator {
   private _registerConnectHandler = () => {
     this._socket.value.on('playerConnected', (name: string, id: string) => {
       messageBox.success(`${name} dołącza`);
-      this._addPlayer(id, name);
     });
   };
-
-  private _addPlayer(id: string, name: string) {
-    this._players[id] = name;
-  }
 
   private _registerDisconnectHandler = () => {
     this._socket.value.on('playerDisconnected', (name: string, id: string) => {
@@ -148,9 +202,9 @@ class RocketGameSpectator {
         return rocket;
       }
 
-      rocket.x = playerPosition.posX;
-      rocket.y = playerPosition.posY;
-      rocket.rotation = playerPosition.rotation;
+      const { posX, posY, rotation } = playerPosition;
+
+      rocket.updatePos(posX, posY, rotation);
     });
   };
 
@@ -174,11 +228,17 @@ class RocketGameSpectator {
     posY: number = 0,
     rotation: number = 0,
   ) => {
-    const rocket = new Rocket(id, name, posX, posY, rotation);
+    const rocketContainer = new Container();
+    this._app.stage.addChild(rocketContainer);
+    const rocket = new Rocket(id, name, posX, posY, rotation, rocketContainer);
     this._rockets[id] = rocket;
-    this._app.stage.addChild(rocket);
     return rocket;
   };
+
+  private _removeRocket(id: string) {
+    this._rockets[id]?.destroy();
+    this._rockets[id] = null;
+  }
 
   private _createParitcleEmitters = () => {
     const particleContainer = new ParticleContainer();

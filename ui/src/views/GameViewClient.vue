@@ -6,7 +6,16 @@ export enum Engine {
 </script>
 
 <script setup lang="ts">
-import { Application, Sprite, ParticleContainer, Rectangle, Texture } from 'pixi.js';
+import {
+  Application,
+  Sprite,
+  ParticleContainer,
+  Rectangle,
+  Texture,
+  Text,
+  Container,
+  TextStyle,
+} from 'pixi.js';
 import falcon9 from '@/components/sprites/falcon_9_block_5_legs_deployed.png';
 import particle from '@/components/sprites/particle.png';
 import fire from '@/components/sprites/fire.png';
@@ -28,22 +37,62 @@ class Rocket extends Sprite {
   speedY: number;
   rotationSpeed: number;
 
+  container: Container;
+
+  leftEmitter: Emitter;
+  rightEmitter: Emitter;
+
   constructor(
-    x: number,
-    y: number,
+    container: Container,
+    x: number = 0,
+    y: number = 0,
+    rotation: number = 0,
     texture: Texture = Texture.from(falcon9),
     speedX: number = 0,
     speedY: number = 0,
     rotationSpeed: number = 0,
   ) {
     super(texture);
+
     this.anchor.set(0.5);
-    this.x = x;
-    this.y = y;
+    this.rotation = rotation;
+    this.container = container;
+
+    this.container.x = x;
+    this.container.y = y;
     this.speedX = speedX;
     this.speedY = speedY;
     this.rotationSpeed = rotationSpeed;
+
+    this.container.addChild(this);
+
+    this.leftEmitter = new Emitter(
+      this.container,
+      upgradeConfig(particleSettings, [fire, particle]),
+    );
+    this.leftEmitter.autoUpdate = true;
+    this.leftEmitter.emit = false;
+    this.leftEmitter.updateSpawnPos(-15, 150);
+
+    this.rightEmitter = new Emitter(
+      this.container,
+      upgradeConfig(particleSettings, [fire, particle]),
+    );
+    this.rightEmitter.autoUpdate = true;
+    this.rightEmitter.emit = false;
+    this.rightEmitter.updateSpawnPos(15, 150);
   }
+
+  updatePos = (x: number, y: number, rotation: number) => {
+    this.rotation = rotation;
+
+    this.leftEmitter.rotate(rotation);
+    this.rightEmitter.rotate(rotation);
+
+    this.container.x = x;
+    this.container.y = y;
+    this.rotation = rotation;
+  };
 }
 
 class RocketGamePlayer {
@@ -83,7 +132,6 @@ class RocketGamePlayer {
     this._registerResizeHandler();
 
     this._createRocket();
-    this._createParitcleEmitters();
     this._createStageHitArea();
 
     this._resizeHandler();
@@ -106,35 +154,9 @@ class RocketGamePlayer {
   };
 
   private _createRocket = () => {
-    this._rocket = new Rocket(0, 0);
-    this._app.stage.addChild(this._rocket);
-  };
-
-  private _createParitcleEmitters = () => {
-    const particleContainer = new ParticleContainer();
-    this._app.stage.addChild(particleContainer);
-
-    this._leftEmitter = new Emitter(
-      particleContainer,
-      upgradeConfig(particleSettings, [fire, particle]),
-    );
-    this._leftEmitter.autoUpdate = true;
-    this._leftEmitter.updateSpawnPos(
-      this._app.screen.width / 2 - 10,
-      this._app.screen.height / 2 + 120,
-    );
-    this._leftEmitter.emit = false;
-
-    this._rightEmitter = new Emitter(
-      particleContainer,
-      upgradeConfig(particleSettings, [fire, particle]),
-    );
-    this._rightEmitter.autoUpdate = true;
-    this._rightEmitter.updateSpawnPos(
-      this._app.screen.width / 2 + 10,
-      this._app.screen.height / 2 + 120,
-    );
-    this._rightEmitter.emit = false;
+    const rocketContainer = new Container();
+    this._app.stage.addChild(rocketContainer);
+    this._rocket = new Rocket(rocketContainer);
   };
 
   private _createStageHitArea = () => {
@@ -145,7 +167,12 @@ class RocketGamePlayer {
 
   private _sendPos = () => {
     if (this._socket.value) {
-      this._socket.value.emit('position', this._rocket.x, this._rocket.y, this._rocket.rotation);
+      this._socket.value.emit(
+        'position',
+        this._rocket.container.x,
+        this._rocket.container.y,
+        this._rocket.rotation,
+      );
     }
   };
 
@@ -159,15 +186,10 @@ class RocketGamePlayer {
 
     this._app.renderer.resize(width, height ? height : document.body.clientHeight);
 
-    this._rocket.x = this._app.screen.width / 2;
-    this._rocket.y = this._app.screen.height / 2;
-    this._leftEmitter.updateSpawnPos(
-      this._app.screen.width / 2 - 10,
-      this._app.screen.height / 2 + 120,
-    );
-    this._rightEmitter.updateSpawnPos(
-      this._app.screen.width / 2 + 10,
-      this._app.screen.height / 2 + 120,
+    this._rocket.updatePos(
+      this._app.screen.width / 2,
+      this._app.screen.height / 2,
+      this._rocket.rotation,
     );
 
     if (this._app.stage.hitArea) {
@@ -190,12 +212,12 @@ class RocketGamePlayer {
     switch (engine) {
       case Engine.LEFT: {
         this._leftEngineFiring = !this._leftEngineFiring;
-        this._leftEmitter.emit = !this._leftEmitter.emit;
+        this._rocket.leftEmitter.emit = !this._rocket.leftEmitter.emit;
         break;
       }
       case Engine.RIGHT: {
         this._rightEngineFiring = !this._rightEngineFiring;
-        this._rightEmitter.emit = !this._rightEmitter.emit;
+        this._rocket.rightEmitter.emit = !this._rocket.rightEmitter.emit;
         break;
       }
     }
@@ -218,16 +240,11 @@ class RocketGamePlayer {
 
   private _registergameLoop = () => {
     this._app.ticker.add((delta) => {
-      this._rocket.x += this._rocket.speedX * delta;
-      this._rocket.y += this._rocket.speedY * delta;
-
-      this._rocket.rotation += (this._rocket.rotationSpeed * delta) / 10;
-
-      this._leftEmitter.updateSpawnPos(this._rocket.x - 15, this._rocket.y + 140);
-      this._leftEmitter.rotate(this._rocket.rotation);
-
-      this._rightEmitter.updateSpawnPos(this._rocket.x + 15, this._rocket.y + 140);
-      this._rightEmitter.rotate(this._rocket.rotation);
+      this._rocket.updatePos(
+        this._rocket.container.x + this._rocket.speedX * delta,
+        this._rocket.container.y + this._rocket.speedY * delta,
+        this._rocket.rotation + (this._rocket.rotationSpeed * delta) / 10,
+      );
 
       if (this._leftEngineFiring) {
         if (this._rocket.speedY > this._MIN_ROCKET_SPEED_Y) {
